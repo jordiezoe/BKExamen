@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #ffffff;
+  color: #1a1a1a;
+  font-family: Arial, Helvetica, system-ui, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ── SVMNIVO/TestVision-achtergrond: vaag diagonaal antwoordraster ── */
+.svm-watermark {
+  position: relative;
+}
+.svm-watermark::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60' viewBox='0 0 120 60'%3E%3Cg fill='none' stroke='%23dc8f4b' stroke-width='1.2' opacity='0.5'%3E%3Ccircle cx='16' cy='20' r='7'/%3E%3Crect x='34' y='13' width='40' height='14' rx='2'/%3E%3Ccircle cx='92' cy='20' r='7'/%3E%3Crect x='2' y='42' width='30' height='12' rx='2'/%3E%3Ccircle cx='52' cy='48' r='6'/%3E%3Crect x='72' y='42' width='40' height='12' rx='2'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  transform: rotate(-18deg) scale(1.4);
+  transform-origin: center;
+  opacity: 0.14;
+}
+
+/* Blokbalk-gradient zoals de echte proeftoets. */
+.svm-blockbar {
+  background: linear-gradient(180deg, #f3d4ad 0%, #e7b378 48%, #d9975a 100%);
+  border: 1px solid #c88a4e;
+}
+
+/* Metalen strip onder de kop. */
+.svm-metal {
+  background: linear-gradient(180deg, #e9e9e9 0%, #cfcfcf 45%, #f4f4f4 55%, #dcdcdc 100%);
+  border-top: 1px solid #bcbcbc;
+  border-bottom: 1px solid #a9a9a9;
+}
+
+/* Donkergrijze onderbalk. */
+.svm-toolbar {
+  background: linear-gradient(180deg, #6c6c6c 0%, #565656 100%);
+  color: #f2f2f2;
+  border-top: 1px solid #3f3f3f;
+}
+.svm-btn {
+  background: linear-gradient(180deg, #5a5a5a 0%, #3f3f3f 100%);
+  border: 1px solid #2e2e2e;
+  color: #fff;
+}
+.svm-btn:hover {
+  background: linear-gradient(180deg, #6a6a6a 0%, #4a4a4a 100%);
+}
+.svm-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
