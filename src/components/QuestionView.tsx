@@ -1,4 +1,5 @@
 import { asset } from '../lib/asset'
+import { Inline } from '../lib/inlineMarkdown'
 import { BlockBar } from './BlockBar'
 import type { FlatItem } from '../App'
 import type { Answer, ExamQuestion } from '../lib/exam'
@@ -30,7 +31,9 @@ export function QuestionView({
 
         {/* Vraagtekst */}
         <div className="border border-slate-300 border-t-0 bg-slate-50/70 px-4 py-3">
-          <p className="text-slate-800 leading-relaxed">{q.prompt}</p>
+          <p className="text-slate-800 leading-relaxed whitespace-pre-line">
+            <Inline text={q.prompt} />
+          </p>
 
           {q.image && (
             <figure className="mt-3">
@@ -89,7 +92,7 @@ export function QuestionView({
                       checked={selected}
                       onChange={() => onAnswer({ mc: i })}
                     />
-                    <span className="text-slate-800">{opt}</span>
+                    <span className="text-slate-800"><Inline text={opt} /></span>
                   </label>
                 )
               })
@@ -121,7 +124,7 @@ export function QuestionView({
                         onAnswer({ multi: next })
                       }}
                     />
-                    <span className="text-slate-800">{opt}</span>
+                    <span className="text-slate-800"><Inline text={opt} /></span>
                   </label>
                 )
               })}

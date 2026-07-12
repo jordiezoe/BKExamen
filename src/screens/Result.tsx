@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import type { Config, FlatItem, Session } from '../App'
 import { SvmLogo } from '../components/SvmLogo'
+import { Inline } from '../lib/inlineMarkdown'
 import { CESUUR, MODE_TITLES, gradeItem, type ExamQuestion, type Verdict } from '../lib/exam'
 
 function nl(n: number, decimals = 2): string {
@@ -216,7 +217,9 @@ export function Result({
                             <span className="w-6 text-sm text-slate-500 tabular-nums">
                               {g.flat.number}
                             </span>
-                            <span className="flex-1 text-sm text-slate-700 truncate">{q.prompt}</span>
+                            <span className="flex-1 text-sm text-slate-700 truncate">
+                              <Inline text={q.prompt} />
+                            </span>
                             <span className={`text-sm font-medium shrink-0 ${VERDICT_COLOR[g.verdict]}`}>
                               {VERDICT_LABEL[g.verdict]}
                             </span>
@@ -295,14 +298,14 @@ function Feedback({
               }`}
             >
               <span className="w-4 shrink-0">{isCorrect ? '✓' : isChosen ? '✗' : ''}</span>
-              <span>{opt}</span>
+              <span><Inline text={opt} /></span>
             </li>
           )
         })}
       </ul>
       {q.explanation && (
         <p className="mt-2 text-slate-600 bg-slate-50 border border-slate-200 rounded p-2">
-          {q.explanation}
+          <Inline text={q.explanation} />
         </p>
       )}
     </div>
