@@ -1,9 +1,16 @@
 import { useState } from 'react'
 import type { Config } from '../App'
 import { SvmLogo } from '../components/SvmLogo'
-import { MODE_LABELS, type ExamLength, type ExamMode } from '../lib/exam'
+import { type ExamLength, type ExamMode } from '../lib/exam'
 
-const MODES: ExamMode[] = ['BT1', 'BT2', 'BT1-2']
+const MODES: ExamMode[] = ['BT1', 'BT2', 'BT1-2', 'OEFEN']
+
+const MODE_TILE: Record<ExamMode, { title: string; sub: string }> = {
+  BT1: { title: 'BT1', sub: 'kennen en herkennen' },
+  BT2: { title: 'BT2', sub: 'toepassen en analyseren' },
+  'BT1-2': { title: 'BT1-2', sub: 'eindsimulatie' },
+  OEFEN: { title: 'Oefening', sub: 'alleen nieuwe vragen' },
+}
 
 export function Home({
   defaultName,
@@ -45,7 +52,7 @@ export function Home({
           {/* Modus */}
           <section className="bg-white rounded-lg border border-slate-300 p-5">
             <h2 className="font-semibold text-slate-800 mb-3">1 · Kies je toets</h2>
-            <div className="grid gap-2 sm:grid-cols-3">
+            <div className="grid gap-2 grid-cols-2 sm:grid-cols-4">
               {MODES.map((m) => (
                 <button
                   key={m}
@@ -56,13 +63,17 @@ export function Home({
                       : 'border-slate-300 hover:bg-slate-50'
                   }`}
                 >
-                  <div className="font-semibold text-slate-800">{m}</div>
-                  <div className="text-xs text-slate-500 mt-0.5">
-                    {MODE_LABELS[m].split('—')[1]?.trim()}
-                  </div>
+                  <div className="font-semibold text-slate-800">{MODE_TILE[m].title}</div>
+                  <div className="text-xs text-slate-500 mt-0.5">{MODE_TILE[m].sub}</div>
                 </button>
               ))}
             </div>
+            {mode === 'OEFEN' && (
+              <p className="mt-3 text-xs text-slate-500">
+                In deze modus komen alleen de nieuw toegevoegde examen-stijl vragen langs, inclusief
+                de beeldvragen (dakvormen, metselverbanden, bouwstijlen, ventilatie).
+              </p>
+            )}
           </section>
 
           {/* Lengte */}

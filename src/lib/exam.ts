@@ -1,4 +1,4 @@
-import { topics } from '../content'
+import { topics, nieuweVraagIds } from '../content'
 import type { ExamSection, Niveau, Question } from '../types/content'
 import { shuffleQuestionOptions } from './shuffleOptions'
 
@@ -14,7 +14,7 @@ import { shuffleQuestionOptions } from './shuffleOptions'
  *  - meerkeuze (mc) én meervoudige keuze (multi, met partiële punten).
  */
 
-export type ExamMode = 'BT1' | 'BT2' | 'BT1-2'
+export type ExamMode = 'BT1' | 'BT2' | 'BT1-2' | 'OEFEN'
 export type ExamLength = 'kort' | 'vol'
 
 export type ExamQuestion = MultipleChoiceQ | MultiSelectQ
@@ -107,7 +107,7 @@ export function buildExam(mode: ExamMode, length: ExamLength = 'vol'): ExamBlock
   const targets = length === 'kort' ? BLOCK_TARGETS_KORT : BLOCK_TARGETS_VOL
 
   const wantsNiveau = (q: Question): boolean => {
-    if (mode === 'BT1-2') return true
+    if (mode === 'BT1-2' || mode === 'OEFEN') return true
     const n = niveauOf(q.toetstermCode, niveauMap)
     return n === undefined || n === mode
   }
@@ -120,6 +120,7 @@ export function buildExam(mode: ExamMode, length: ExamLength = 'vol'): ExamBlock
     for (const t of sectionTopics) {
       for (const q of t.questions) {
         if (!isExamQuestion(q) || !wantsNiveau(q)) continue
+        if (mode === 'OEFEN' && !nieuweVraagIds.has(q.id)) continue
         const item: ExamItem = { question: q, topicCode: t.code, topicTitle: t.title, section }
         const arr = byCode.get(q.toetstermCode)
         if (arr) arr.push(item)
@@ -183,10 +184,12 @@ export const MODE_LABELS: Record<ExamMode, string> = {
   BT1: 'BT1 — kennen en herkennen',
   BT2: 'BT2 — toepassen en analyseren',
   'BT1-2': 'BT1-2 eindsimulatie',
+  OEFEN: 'Examen-oefening — nieuwe vragen',
 }
 
 export const MODE_TITLES: Record<ExamMode, string> = {
   BT1: 'Bouwkunde BT1 Proeftoets',
   BT2: 'Bouwkunde BT2 Proeftoets',
   'BT1-2': 'Bouwkunde BT1-2 Proeftoets',
+  OEFEN: 'Bouwkunde Examen-oefening',
 }

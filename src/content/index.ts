@@ -5,6 +5,7 @@ import { sectionTopics as C } from './section_C'
 import { sectionTopics as D } from './section_D'
 import { aanvullendeVragen } from './aanvullend'
 import { examenoefeningVragen } from './examenoefening'
+import { beeldVragen } from './beeldvragen'
 
 export { topicMetas } from './topicMetas'
 export type { TopicMeta } from './topicMetas'
@@ -19,9 +20,23 @@ export type { TopicMeta } from './topicMetas'
  * de examen-engine ze automatisch meeneemt.
  */
 export const topics: Topic[] = [...A, ...B, ...C, ...D].map((t) => {
-  const extra = [...(aanvullendeVragen[t.code] ?? []), ...(examenoefeningVragen[t.code] ?? [])]
+  const extra = [
+    ...(aanvullendeVragen[t.code] ?? []),
+    ...(examenoefeningVragen[t.code] ?? []),
+    ...(beeldVragen[t.code] ?? []),
+  ]
   return extra.length ? { ...t, questions: [...t.questions, ...extra] } : t
 })
+
+/**
+ * Id's van de nieuw geschreven vragen (aanvullend + examen-oefening +
+ * beeldvragen). De aparte modus "Examen-oefening" put uitsluitend hieruit.
+ */
+export const nieuweVraagIds: Set<string> = new Set(
+  [aanvullendeVragen, examenoefeningVragen, beeldVragen].flatMap((rec) =>
+    Object.values(rec).flatMap((qs) => qs.map((q) => q.id)),
+  ),
+)
 
 const byCode = new Map(topics.map((t) => [t.code, t]))
 export function getTopic(code: string): Topic | undefined {

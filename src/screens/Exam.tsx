@@ -99,23 +99,25 @@ export function ExamScreen({
 
       {/* Onderbalk */}
       <div className="svm-toolbar fixed bottom-0 left-0 right-0 h-[52px]">
-        <div className="max-w-3xl mx-auto h-full px-2 sm:px-4 flex items-center gap-2 text-sm">
-          <span className="flex items-center gap-1 tabular-nums">
+        <div className="max-w-3xl mx-auto h-full px-2 sm:px-4 flex items-center gap-1.5 sm:gap-2 text-sm">
+          {/* Links: tijd + hulpknoppen */}
+          <span className="flex items-center gap-1 tabular-nums shrink-0">
             <span aria-hidden>⏱</span>
-            <span className="hidden sm:inline">Tijd</span> {fmtTime(now - session.startedAt)}
+            <span className="hidden sm:inline">Tijd</span>
+            {fmtTime(now - session.startedAt)}
           </span>
 
           <button
             onClick={() => setShowOverzicht(true)}
-            className="svm-btn rounded px-2 py-1.5 text-xs"
-            title="Vraagoverzicht"
+            className="svm-btn rounded px-2 py-1.5 text-xs shrink-0"
+            title="Vraagoverzicht en toets beëindigen"
             aria-label="Vraagoverzicht"
           >
             ▦
           </button>
           <button
             onClick={() => onToggleFlag(q.id)}
-            className={`rounded px-2 py-1.5 text-xs border ${
+            className={`rounded px-2 py-1.5 text-xs border shrink-0 ${
               flagged ? 'bg-svm-500 border-svm-600' : 'svm-btn'
             }`}
             title="Markeer deze vraag"
@@ -124,27 +126,30 @@ export function ExamScreen({
             🚩
           </button>
 
-          <span className="ml-auto mr-1 tabular-nums whitespace-nowrap text-xs sm:text-sm">
-            Vraag {current.number} / {total}
+          {/* Teller — vult de resterende ruimte en mag krimpen */}
+          <span className="flex-1 min-w-0 text-center tabular-nums whitespace-nowrap overflow-hidden text-ellipsis text-xs sm:text-sm">
+            <span className="hidden sm:inline">Vraag </span>
+            {current.number}/{total}
           </span>
 
+          {/* Rechts: navigatie — altijd zichtbaar en aanklikbaar */}
           <button
             onClick={() => setConfirmEnd(true)}
-            className="svm-btn rounded px-2 sm:px-3 py-1.5 text-xs whitespace-nowrap"
+            className="svm-btn rounded px-3 py-1.5 text-xs whitespace-nowrap shrink-0 hidden sm:inline-flex"
           >
-            <span className="hidden sm:inline">Toets </span>beëindigen
+            Toets beëindigen
           </button>
           <button
             onClick={() => onNavigate(Math.max(0, session.index - 1))}
             disabled={session.index === 0}
-            className="svm-btn rounded px-2 sm:px-3 py-1.5 text-xs"
+            className="svm-btn rounded px-2.5 sm:px-3 py-1.5 text-xs shrink-0"
           >
             Vorige
           </button>
           <button
             onClick={() => onNavigate(Math.min(total - 1, session.index + 1))}
             disabled={session.index === total - 1}
-            className="svm-btn rounded px-2 sm:px-3 py-1.5 text-xs"
+            className="svm-btn rounded px-2.5 sm:px-3 py-1.5 text-xs shrink-0 font-semibold"
           >
             Volgende
           </button>
