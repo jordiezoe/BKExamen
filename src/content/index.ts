@@ -4,6 +4,7 @@ import { sectionTopics as B } from './section_B'
 import { sectionTopics as C } from './section_C'
 import { sectionTopics as D } from './section_D'
 import { aanvullendeVragen } from './aanvullend'
+import { examenoefeningVragen } from './examenoefening'
 
 export { topicMetas } from './topicMetas'
 export type { TopicMeta } from './topicMetas'
@@ -18,8 +19,8 @@ export type { TopicMeta } from './topicMetas'
  * de examen-engine ze automatisch meeneemt.
  */
 export const topics: Topic[] = [...A, ...B, ...C, ...D].map((t) => {
-  const extra = aanvullendeVragen[t.code]
-  return extra && extra.length ? { ...t, questions: [...t.questions, ...extra] } : t
+  const extra = [...(aanvullendeVragen[t.code] ?? []), ...(examenoefeningVragen[t.code] ?? [])]
+  return extra.length ? { ...t, questions: [...t.questions, ...extra] } : t
 })
 
 const byCode = new Map(topics.map((t) => [t.code, t]))
