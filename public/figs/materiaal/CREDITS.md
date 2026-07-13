@@ -15,3 +15,7 @@ Alle foto's afkomstig van Wikimedia Commons, gebruikt onder de vermelde licentie
 - **pir-isolatie.jpg** — thingermejig, CC BY-SA 2.0. Bron: https://commons.wikimedia.org/wiki/File:Polyisocyanurate_insulation_boards.jpg
 - **vlas-isolatie.jpg** — Льно-Джутовая Компания, CC BY-SA 3.0. Bron: https://commons.wikimedia.org/wiki/File:Termolen.jpg
 - **stalen-ligger.jpg** — Todd Murray, CC BY-SA 3.0. Bron: https://commons.wikimedia.org/wiki/File:I-Beam_002.JPG
+- **glas-in-lood.jpg** — Pom², CC BY-SA 3.0. Bron: https://commons.wikimedia.org/wiki/File:Vitrail_cath%C3%A9drale_Saint-%C3%89tienne,Toulouse.jpg
+- **spiltrap.jpg** — Colin, CC BY-SA 3.0. Bron: https://commons.wikimedia.org/wiki/File:Vatican_Museums_Spiral_Staircase_Looking_Up_2012.jpg
+- **closet-wc.jpg** — Wolfmann, CC BY-SA 4.0. Bron: https://commons.wikimedia.org/wiki/File:Valdres_videreg%C3%A5ende_skole_(secondary_school_Norway)_2025-04-09_Toalett_bad_funksjonshemmede.jpg
+- **zwaluwstaart.jpg** — Wikimedia Commons, CC BY-SA 3.0. Bron: https://commons.wikimedia.org/wiki/File:Dovetail_joint.png

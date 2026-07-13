@@ -194,6 +194,61 @@ export const beeldVragen2: Record<string, Question[]> = {
       explanation:
         'Een keramische wastafel met kraan, doorgaans in de badkamer of het toilet. Herkenbaar aan de ondiepe kom met overloop en één tapkraan.',
     },
+    {
+      id: 'C.1.mat2',
+      toetstermCode: 'C.1.mat-closet',
+      type: 'mc',
+      prompt: 'Welk sanitair toestel is op de foto te zien?',
+      image: { src: `${MAT}/closet-wc.jpg`, caption: CAP, width: 'md' },
+      options: ['Een closet (wc)', 'Een wastafel', 'Een fontein', 'Een urinoir'],
+      correctIndex: 0,
+      explanation:
+        'Een closet (wc): keramische toiletpot met stortbak/spoeling, aangesloten op de vuilwaterriolering via een closetaansluiting met stankafsluiter.',
+    },
+  ],
+  'B.9': [
+    {
+      id: 'B.9.mat1',
+      toetstermCode: 'B.9.mat-verbinding',
+      type: 'mc',
+      prompt: 'Welke houtverbinding is op de afbeelding weergegeven?',
+      image: { src: `${MAT}/zwaluwstaart.jpg`, caption: CAP, width: 'md' },
+      options: [
+        'Zwaluwstaartverbinding',
+        'Pen-en-gatverbinding',
+        'Vingerlas',
+        'Messing-en-groefverbinding',
+      ],
+      correctIndex: 0,
+      explanation:
+        'De zwaluwstaartverbinding heeft wig- of trapeziumvormige pennen die als een puzzel in elkaar grijpen; hij trekt niet los in de trekrichting en is heel sterk (o.a. bij laden en kisten).',
+    },
+  ],
+  'B.14': [
+    {
+      id: 'B.14.mat1',
+      toetstermCode: 'B.14.mat-trap',
+      type: 'mc',
+      prompt: 'Welke trapvorm is op de foto te zien?',
+      image: { src: `${MAT}/spiltrap.jpg`, caption: CAP, width: 'md' },
+      options: ['Spiltrap / wenteltrap', 'Rechte steektrap', 'Halfslagtrap (bordestrap)', 'Vlizotrap'],
+      correctIndex: 0,
+      explanation:
+        'Een spiraalvormige trap die om een centrale as (spil) of een open kern draait: de spil- of wenteltrap. Compact in ruimtebeslag, maar steiler en minder comfortabel.',
+    },
+  ],
+  'C.11': [
+    {
+      id: 'C.11.mat1',
+      toetstermCode: 'C.11.mat-glasinlood',
+      type: 'mc',
+      prompt: 'Welke glassoort is op de afbeelding te zien?',
+      image: { src: `${MAT}/glas-in-lood.jpg`, caption: CAP, width: 'md' },
+      options: ['Glas-in-lood', 'Draadglas', 'HR++-isolatieglas', 'Zonwerend glas'],
+      correctIndex: 0,
+      explanation:
+        'Glas-in-lood: gekleurde glasstukjes gevat in loden profielen (H-profiel), vaak met een figuratieve voorstelling. Veel toegepast in kerken en oudere/monumentale panden.',
+    },
   ],
   'C.4': [
     {
