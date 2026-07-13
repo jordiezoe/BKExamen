@@ -11,3 +11,7 @@ Alle foto's afkomstig van Wikimedia Commons, gebruikt onder de vermelde licentie
 - **rietdak.jpg** — Miranda.Kopetzky, CC BY-SA 4.0. Bron: https://commons.wikimedia.org/wiki/File:House_in_Carmel,_Norfolk_Reed_roof,_1974.jpg
 - **leiendak.jpg** — Paul Harvey, CC BY-SA 2.0. Bron: https://commons.wikimedia.org/wiki/File:Detail_of_old_roof_ridge_tiles_-_geograph.org.uk_-_1013997.jpg
 - **pur-schuim.jpg** — Chicagosprayfoam, CC BY-SA 3.0. Bron: https://commons.wikimedia.org/wiki/File:Spray_Polyurethane_Foam_Application.jpg
+- **glaswol.jpg** — Tracey Nicholls, CSIRO, CC BY 3.0. Bron: https://commons.wikimedia.org/wiki/File:CSIRO_ScienceImage_2175_Installing_Insulation_Batts.jpg
+- **pir-isolatie.jpg** — thingermejig, CC BY-SA 2.0. Bron: https://commons.wikimedia.org/wiki/File:Polyisocyanurate_insulation_boards.jpg
+- **vlas-isolatie.jpg** — Льно-Джутовая Компания, CC BY-SA 3.0. Bron: https://commons.wikimedia.org/wiki/File:Termolen.jpg
+- **stalen-ligger.jpg** — Todd Murray, CC BY-SA 3.0. Bron: https://commons.wikimedia.org/wiki/File:I-Beam_002.JPG

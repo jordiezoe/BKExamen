@@ -456,6 +456,80 @@ export const examenoefening2Vragen: Record<string, Question[]> = {
       explanation:
         'Lambda (λ) is de warmtegeleidingscoëfficiënt: hoe lager, hoe slechter het materiaal warmte geleidt en dus hoe beter het isoleert.',
     },
+    {
+      id: 'B.16.f2',
+      toetstermCode: 'B.16.1',
+      type: 'mc',
+      prompt:
+        'Er is maar weinig ruimte beschikbaar en toch is een hoge isolatiewaarde nodig. Welk isolatiemateriaal ligt dan het meest voor de hand?',
+      options: [
+        'PIR of PUR (hoge isolatiewaarde per cm)',
+        'Glaswol',
+        'Steenwol',
+        'Vlasisolatie',
+      ],
+      correctIndex: 0,
+      explanation:
+        'PIR en PUR hebben de laagste lambda-waarde (beste isolatie per cm), dus bij weinig dikte (dun dak, dunne spouw) bereik je daarmee de meeste isolatie. Minerale wol en vlas isoleren minder per cm.',
+    },
+    {
+      id: 'B.16.f3',
+      toetstermCode: 'B.16.1',
+      type: 'mc',
+      prompt:
+        'Welk isolatiemateriaal kies je op een plek die zowel drukvast als volledig waterdicht moet zijn, bijvoorbeeld onder een vloer of fundering?',
+      options: [
+        'Foamglas (cellulair glas) of XPS',
+        'Glaswol',
+        'Steenwol',
+        'Vlasisolatie',
+      ],
+      correctIndex: 0,
+      explanation:
+        'Foamglas en XPS zijn drukvast en nemen geen water op — geschikt op belaste, vochtige plekken (onder vloeren, onder fundering, omkeerdak). Minerale wol en vlas zouden daar juist vocht opnemen en inzakken.',
+    },
+    {
+      id: 'B.16.f4',
+      toetstermCode: 'B.16.1',
+      type: 'mc',
+      prompt:
+        'Waarom wordt bij een brandwerende scheiding of rond een rookkanaal juist steenwol toegepast en geen kunststofschuim?',
+      options: [
+        'Steenwol is onbrandbaar en bestand tegen hoge temperaturen',
+        'Steenwol isoleert per cm het beste van alle materialen',
+        'Steenwol is volledig waterdicht',
+        'Steenwol is het goedkoopste materiaal',
+      ],
+      correctIndex: 0,
+      explanation:
+        'Steenwol (uit gesteente) is onbrandbaar en hittebestendig; kunststofschuimen (EPS, PUR) smelten of branden juist. Daarom kiest men steenwol bij brandveiligheid.',
+    },
+    {
+      id: 'B.16.f5',
+      toetstermCode: 'B.16.1',
+      type: 'mc',
+      prompt: 'Welk isolatiemateriaal is plantaardig (bio-based)?',
+      options: ['Vlas', 'EPS', 'XPS', 'PIR'],
+      correctIndex: 0,
+      explanation:
+        'Vlas is een plantaardig (bio-based) isolatiemateriaal, een duurzaam alternatief voor minerale wol en kunststofschuimen (EPS/XPS/PUR/PIR).',
+    },
+    {
+      id: 'B.16.f6',
+      toetstermCode: 'B.16.1',
+      type: 'mc',
+      prompt:
+        'Een bestaande, ongeïsoleerde spouwmuur wordt na-geïsoleerd zonder de gevel open te breken. Hoe gebeurt dat meestal?',
+      options: [
+        'Door isolatie (bv. EPS-parels of minerale wolvlokken) in de spouw te blazen',
+        'Door XPS-platen op het dak te leggen',
+        'Door de binnenmuur te stucen',
+        'Door dubbel glas te plaatsen',
+      ],
+      correctIndex: 0,
+      explanation:
+        'Spouwmuurisolatie wordt ingeblazen via gaatjes in de voegen: EPS-parels, glas-/steenwolvlokken of PUR-schuim vullen de bestaande spouw — zonder de gevel af te breken.',
+    },
   ],
 
   // ─────────────── C · Afwerking en installaties ───────────────

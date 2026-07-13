@@ -52,6 +52,22 @@ export const beeldVragen2: Record<string, Question[]> = {
       explanation:
         'Een vakwerk van stalen staven (driehoeken) die samen een lichte, sterke ligger of spant vormen — herkenbaar aan de open, driehoekige opbouw.',
     },
+    {
+      id: 'B.7.mat2',
+      toetstermCode: 'B.7.mat-ligger',
+      type: 'mc',
+      prompt: 'Welk bouwelement draagt in de foto de vloer?',
+      image: { src: `${MAT}/stalen-ligger.jpg`, caption: CAP, width: 'md' },
+      options: [
+        'Een stalen ligger (I-/H-profiel)',
+        'Een houten moerbalk',
+        'Een betonnen ligger',
+        'Een stalen vakwerkligger',
+      ],
+      correctIndex: 0,
+      explanation:
+        'Een warmgewalst stalen profiel met de kenmerkende I-/H-vorm (flenzen boven en onder, lijf ertussen), hier als draagbalk onder een vloer.',
+    },
   ],
   'B.16': [
     {
@@ -96,6 +112,39 @@ export const beeldVragen2: Record<string, Question[]> = {
       correctIndex: 0,
       explanation:
         'PUR wordt als vloeibaar schuim gespoten, dat opschuimt en uithardt tot een naadloze isolatielaag met een hoge isolatiewaarde. Steen-/glaswol en EPS worden juist als platen/rollen geleverd.',
+    },
+    {
+      id: 'B.16.mat4',
+      toetstermCode: 'B.16.mat-glaswol',
+      type: 'mc',
+      prompt: 'Welk isolatiemateriaal wordt hier tussen de balken aangebracht?',
+      image: { src: `${MAT}/glaswol.jpg`, caption: CAP, width: 'md' },
+      options: ['Glaswol', 'EPS-platen', 'XPS-platen', 'PUR-schuim'],
+      correctIndex: 0,
+      explanation:
+        'Zachte, gele/geelbruine matten van glaswol (minerale wol uit gesmolten glas), hier als dekenisolatie tussen een balklaag of op zolder gelegd. Draag altijd een stofmasker bij het verwerken.',
+    },
+    {
+      id: 'B.16.mat5',
+      toetstermCode: 'B.16.mat-pir',
+      type: 'mc',
+      prompt: 'Welk isolatiemateriaal zie je op de foto (platen met een aluminium cachering)?',
+      image: { src: `${MAT}/pir-isolatie.jpg`, caption: CAP, width: 'md' },
+      options: ['PIR (polyisocyanuraat)', 'Steenwol', 'Glaswol', 'Vlasisolatie'],
+      correctIndex: 0,
+      explanation:
+        'PIR-platen zijn harde kunststofschuimplaten met een aluminium/folie-cachering; ze hebben een zeer hoge isolatiewaarde per cm en worden o.a. op daken en in dunne constructies gebruikt. PIR lijkt op PUR maar is nóg beter isolerend en brandveiliger.',
+    },
+    {
+      id: 'B.16.mat6',
+      toetstermCode: 'B.16.mat-vlas',
+      type: 'mc',
+      prompt: 'Welk (natuurlijk) isolatiemateriaal is op de foto te zien?',
+      image: { src: `${MAT}/vlas-isolatie.jpg`, caption: CAP, width: 'md' },
+      options: ['Vlasisolatie (plantaardig)', 'Steenwol', 'EPS', 'Foamglas'],
+      correctIndex: 0,
+      explanation:
+        'Een mat van vlasvezels: een plantaardig (bio-based) isolatiemateriaal, herkenbaar aan de natuurlijke bruine vezels. Duurzaam alternatief voor minerale wol en kunststofschuimen.',
     },
   ],
   'B.13': [
