@@ -81,6 +81,57 @@ export const beeldVragen2: Record<string, Question[]> = {
       explanation:
         'De donkere, vezelige platen zijn steenwol (minerale wol): onbrandbaar en dampopen, hier als gevelisolatie aangebracht. EPS/XPS zijn juist gladde kunststofplaten.',
     },
+    {
+      id: 'B.16.mat3',
+      toetstermCode: 'B.16.mat-pur',
+      type: 'mc',
+      prompt: 'Welk isolatiemateriaal wordt hier aangebracht?',
+      image: { src: `${MAT}/pur-schuim.jpg`, caption: CAP, width: 'md' },
+      options: [
+        'PUR (polyurethaan-spuitschuim)',
+        'Steenwol',
+        'EPS-platen',
+        'Glaswol',
+      ],
+      correctIndex: 0,
+      explanation:
+        'PUR wordt als vloeibaar schuim gespoten, dat opschuimt en uithardt tot een naadloze isolatielaag met een hoge isolatiewaarde. Steen-/glaswol en EPS worden juist als platen/rollen geleverd.',
+    },
+  ],
+  'B.13': [
+    {
+      id: 'B.13.mat1',
+      toetstermCode: 'B.13.dakbedekking',
+      type: 'mc',
+      prompt: 'Welke dakbedekking is op de foto te zien?',
+      image: { src: `${MAT}/dakpannen-keramisch.jpg`, caption: CAP, width: 'md' },
+      options: ['Keramische dakpannen', 'Leien', 'Riet', 'Bitumen'],
+      correctIndex: 0,
+      explanation:
+        'Gebakken (keramische) dakpannen van klei, in rijen over elkaar gelegd op panlatten — herkenbaar aan de roodbruine kleur en de regelmatige, geprofileerde pannen.',
+    },
+    {
+      id: 'B.13.mat2',
+      toetstermCode: 'B.13.dakbedekking',
+      type: 'mc',
+      prompt: 'Welke dakbedekking is op de foto te zien?',
+      image: { src: `${MAT}/rietdak.jpg`, caption: CAP, width: 'md' },
+      options: ['Riet (rieten dak)', 'Keramische dakpannen', 'Leien', 'EPDM-dakbedekking'],
+      correctIndex: 0,
+      explanation:
+        'Een rieten dak: dik pakket gebundeld riet, met een strak afgewerkte nok. Riet isoleert goed maar vraagt vakmanschap en onderhoud.',
+    },
+    {
+      id: 'B.13.mat3',
+      toetstermCode: 'B.13.dakbedekking',
+      type: 'mc',
+      prompt: 'Welke dakbedekking is op de foto te zien?',
+      image: { src: `${MAT}/leiendak.jpg`, caption: CAP, width: 'md' },
+      options: ['Leien (natuur- of kunstleien)', 'Keramische dakpannen', 'Riet', 'Zinken dakbedekking'],
+      correctIndex: 0,
+      explanation:
+        'Een leiendak: dunne, platte grijze leien (natuursteen of kunstlei) in overlappende rijen, met vorstpannen op de nok.',
+    },
   ],
   'C.1': [
     {
