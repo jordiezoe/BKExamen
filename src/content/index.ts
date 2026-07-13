@@ -7,6 +7,7 @@ import { aanvullendeVragen } from './aanvullend'
 import { examenoefeningVragen } from './examenoefening'
 import { examenoefening2Vragen } from './examenoefening2'
 import { beeldVragen } from './beeldvragen'
+import { beeldVragen2 } from './beeldvragen2'
 
 export { topicMetas } from './topicMetas'
 export type { TopicMeta } from './topicMetas'
@@ -26,6 +27,7 @@ export const topics: Topic[] = [...A, ...B, ...C, ...D].map((t) => {
     ...(examenoefeningVragen[t.code] ?? []),
     ...(examenoefening2Vragen[t.code] ?? []),
     ...(beeldVragen[t.code] ?? []),
+    ...(beeldVragen2[t.code] ?? []),
   ]
   return extra.length ? { ...t, questions: [...t.questions, ...extra] } : t
 })
@@ -35,7 +37,7 @@ export const topics: Topic[] = [...A, ...B, ...C, ...D].map((t) => {
  * beeldvragen). De aparte modus "Examen-oefening" put uitsluitend hieruit.
  */
 export const nieuweVraagIds: Set<string> = new Set(
-  [aanvullendeVragen, examenoefeningVragen, examenoefening2Vragen, beeldVragen].flatMap((rec) =>
+  [aanvullendeVragen, examenoefeningVragen, examenoefening2Vragen, beeldVragen, beeldVragen2].flatMap((rec) =>
     Object.values(rec).flatMap((qs) => qs.map((q) => q.id)),
   ),
 )
