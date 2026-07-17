@@ -322,6 +322,39 @@ export const beeldVragen2: Record<string, Question[]> = {
       explanation:
         'Leisteen is een donkergrijs, in dunne platen splijtbaar metamorf gesteente — veel gebruikt voor dakbedekking (leien). Marmer is licht en geaderd; graniet korrelig en hard.',
     },
+    {
+      id: 'C.14.mat2',
+      toetstermCode: 'C.14.mat-graniet',
+      type: 'mc',
+      prompt: 'Welke natuursteensoort is op de foto te zien?',
+      image: { src: `${MAT}/graniet.jpg`, caption: CAP, width: 'md' },
+      options: ['Graniet', 'Marmer', 'Travertijn', 'Leisteen'],
+      correctIndex: 0,
+      explanation:
+        'Graniet is een stollingsgesteente met een korrelige, gespikkelde structuur van zichtbare kristallen (kwarts, veldspaat, mica). Zeer hard en slijtvast — geschikt voor vloeren, aanrechtbladen en bestrating.',
+    },
+    {
+      id: 'C.14.mat3',
+      toetstermCode: 'C.14.mat-marmer',
+      type: 'mc',
+      prompt: 'Welke natuursteensoort is op de foto te zien?',
+      image: { src: `${MAT}/marmer.jpg`, caption: CAP, width: 'md' },
+      options: ['Marmer', 'Graniet', 'Travertijn', 'Basalt'],
+      correctIndex: 0,
+      explanation:
+        'Marmer is een metamorf gesteente (uit kalksteen), meestal licht/wit met fijne aders. Fraai maar relatief zacht en gevoelig voor zuren — vaak voor wanden, vensterbanken en decoratief werk.',
+    },
+    {
+      id: 'C.14.mat4',
+      toetstermCode: 'C.14.mat-travertijn',
+      type: 'mc',
+      prompt: 'Welke natuursteensoort is op de foto te zien (let op de poriën/gaatjes)?',
+      image: { src: `${MAT}/travertijn.jpg`, caption: CAP, width: 'md' },
+      options: ['Travertijn', 'Graniet', 'Marmer', 'Leisteen'],
+      correctIndex: 0,
+      explanation:
+        'Travertijn is een afzettingsgesteente (kalk), herkenbaar aan de karakteristieke poriën/gaatjes en de warme beige kleur. Veel gebruikt voor vloeren en gevelbekleding.',
+    },
   ],
   'A.1': [
     {

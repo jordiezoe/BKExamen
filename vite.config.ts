@@ -30,6 +30,9 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,svg,png,jpg,jpeg,webp,woff2}'],
         // Bijlage-PDF's kunnen groot zijn; sla ze via runtime cache op.
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
+        // Laat PDF-bijlagen NIET afvangen door de SPA-navigatiefallback,
+        // anders krijgt de gebruiker de app-shell i.p.v. de PDF te zien.
+        navigateFallbackDenylist: [/\.pdf$/i, /\/bijlagen\//],
         runtimeCaching: [
           {
             urlPattern: ({ url }) => url.pathname.endsWith('.pdf'),

@@ -19,3 +19,6 @@ Alle foto's afkomstig van Wikimedia Commons, gebruikt onder de vermelde licentie
 - **spiltrap.jpg** — Colin, CC BY-SA 3.0. Bron: https://commons.wikimedia.org/wiki/File:Vatican_Museums_Spiral_Staircase_Looking_Up_2012.jpg
 - **closet-wc.jpg** — Wolfmann, CC BY-SA 4.0. Bron: https://commons.wikimedia.org/wiki/File:Valdres_videreg%C3%A5ende_skole_(secondary_school_Norway)_2025-04-09_Toalett_bad_funksjonshemmede.jpg
 - **zwaluwstaart.jpg** — Wikimedia Commons, CC BY-SA 3.0. Bron: https://commons.wikimedia.org/wiki/File:Dovetail_joint.png
+- **graniet.jpg** — Eurico Zimbres, CC BY-SA 2.5. Bron: https://commons.wikimedia.org/wiki/File:Capao_bonito_granite.JPG
+- **marmer.jpg** — Fravert, CC BY-SA 4.0. Bron: https://commons.wikimedia.org/wiki/File:Marmor_Cristallo_Fliesen_im_Quadratformat_10x10x1cm.webp
+- **travertijn.jpg** — Fravert, CC BY-SA 4.0. Bron: https://commons.wikimedia.org/wiki/File:Travertin_Classic_Fliesen_im_Quadratformat_20,3x20,3x1cm.jpg
