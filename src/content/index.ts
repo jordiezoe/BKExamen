@@ -8,6 +8,7 @@ import { examenoefeningVragen } from './examenoefening'
 import { examenoefening2Vragen } from './examenoefening2'
 import { examenoefening3Vragen } from './examenoefening3'
 import { examenoefening4Vragen } from './examenoefening4'
+import { examenoefening5Vragen } from './examenoefening5'
 import { beeldVragen } from './beeldvragen'
 import { beeldVragen2 } from './beeldvragen2'
 
@@ -30,6 +31,7 @@ export const topics: Topic[] = [...A, ...B, ...C, ...D].map((t) => {
     ...(examenoefening2Vragen[t.code] ?? []),
     ...(examenoefening3Vragen[t.code] ?? []),
     ...(examenoefening4Vragen[t.code] ?? []),
+    ...(examenoefening5Vragen[t.code] ?? []),
     ...(beeldVragen[t.code] ?? []),
     ...(beeldVragen2[t.code] ?? []),
   ]
@@ -47,6 +49,7 @@ export const nieuweVraagIds: Set<string> = new Set(
     examenoefening2Vragen,
     examenoefening3Vragen,
     examenoefening4Vragen,
+    examenoefening5Vragen,
     beeldVragen,
     beeldVragen2,
   ].flatMap((rec) =>
