@@ -16,6 +16,10 @@ import { bloomExamenA } from './bloomexamenA'
 import { bloomExamenB } from './bloomexamenB'
 import { bloomExamenC } from './bloomexamenC'
 import { bloomExamenD } from './bloomexamenD'
+import { bloomExamenA2 } from './bloomexamenA2'
+import { bloomExamenB2 } from './bloomexamenB2'
+import { bloomExamenC2 } from './bloomexamenC2'
+import { bloomExamenD2 } from './bloomexamenD2'
 
 export { topicMetas } from './topicMetas'
 export type { TopicMeta } from './topicMetas'
@@ -76,9 +80,18 @@ export function getTopic(code: string): Topic | undefined {
  * kwalificatiedossier. Wordt uitsluitend gebruikt door de modus "Bloom
  * examen", die alle onderwerpen zonder uitzondering afneemt.
  */
-export const bloomExamTopics: Record<string, import('../types/content').Question[]> = {
-  ...bloomExamenA,
-  ...bloomExamenB,
-  ...bloomExamenC,
-  ...bloomExamenD,
-}
+export const bloomExamTopics: Record<string, import('../types/content').Question[]> = [
+  bloomExamenA,
+  bloomExamenB,
+  bloomExamenC,
+  bloomExamenD,
+  bloomExamenA2,
+  bloomExamenB2,
+  bloomExamenC2,
+  bloomExamenD2,
+].reduce<Record<string, import('../types/content').Question[]>>((acc, rec) => {
+  for (const [code, qs] of Object.entries(rec)) {
+    acc[code] = [...(acc[code] ?? []), ...qs]
+  }
+  return acc
+}, {})
