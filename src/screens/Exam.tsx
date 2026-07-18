@@ -81,9 +81,15 @@ export function ExamScreen({
         <div className="max-w-3xl mx-auto px-3 sm:px-5">
           <div className="flex gap-[2px] h-1.5">
             {flat.map((f, i) => {
-              const answered =
-                session.answers[f.item.question.id]?.mc !== undefined ||
-                (session.answers[f.item.question.id]?.multi?.length ?? 0) > 0
+              const a = session.answers[f.item.question.id]
+              const answered = !!(
+                a &&
+                (a.mc !== undefined ||
+                  (a.multi?.length ?? 0) > 0 ||
+                  (a.invul?.trim().length ?? 0) > 0 ||
+                  (a.match && Object.keys(a.match).length > 0) ||
+                  a.openSelf !== undefined)
+              )
               return (
                 <div
                   key={f.item.question.id}

@@ -85,5 +85,11 @@ export function Overzicht({
 function isAnswered(session: Session, f: FlatItem): boolean {
   const a = session.answers[f.item.question.id]
   if (!a) return false
-  return a.mc !== undefined || (a.multi !== undefined && a.multi.length > 0)
+  return (
+    a.mc !== undefined ||
+    (a.multi !== undefined && a.multi.length > 0) ||
+    (a.invul !== undefined && a.invul.trim().length > 0) ||
+    (a.match !== undefined && Object.keys(a.match).length > 0) ||
+    a.openSelf !== undefined
+  )
 }

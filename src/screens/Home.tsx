@@ -3,13 +3,14 @@ import type { Config } from '../App'
 import { SvmLogo } from '../components/SvmLogo'
 import { type ExamLength, type ExamMode } from '../lib/exam'
 
-const MODES: ExamMode[] = ['BT1', 'BT2', 'BT1-2', 'OEFEN']
+const MODES: ExamMode[] = ['BT1', 'BT2', 'BT1-2', 'OEFEN', 'BLOOM']
 
 const MODE_TILE: Record<ExamMode, { title: string; sub: string }> = {
   BT1: { title: 'BT1', sub: 'kennen en herkennen' },
   BT2: { title: 'BT2', sub: 'toepassen en analyseren' },
   'BT1-2': { title: 'BT1-2', sub: 'eindsimulatie' },
   OEFEN: { title: 'Oefening', sub: 'alleen nieuwe vragen' },
+  BLOOM: { title: 'Bloom examen', sub: 'alle onderwerpen, alle vraagvormen' },
 }
 
 export function Home({
@@ -52,7 +53,7 @@ export function Home({
           {/* Modus */}
           <section className="bg-white rounded-lg border border-slate-300 p-5">
             <h2 className="font-semibold text-slate-800 mb-3">1 · Kies je toets</h2>
-            <div className="grid gap-2 grid-cols-2 sm:grid-cols-4">
+            <div className="grid gap-2 grid-cols-2 sm:grid-cols-5">
               {MODES.map((m) => (
                 <button
                   key={m}
@@ -74,32 +75,42 @@ export function Home({
                 de beeldvragen (dakvormen, metselverbanden, bouwstijlen, ventilatie).
               </p>
             )}
+            {mode === 'BLOOM' && (
+              <p className="mt-3 text-xs text-slate-500">
+                Het Bloom-examen dekt <b>elk onderwerp</b> uit het kwalificatiedossier, met vijf
+                vraagsoorten (meerkeuze, meerantwoord, match, invul en open vragen) op het
+                Bloom-niveau (kennis t/m evalueren) dat bij dat onderdeel hoort. Dit is een lange,
+                volledige toets — de lengte-instelling hieronder is hierbij niet van toepassing.
+              </p>
+            )}
           </section>
 
           {/* Lengte */}
-          <section className="bg-white rounded-lg border border-slate-300 p-5">
-            <h2 className="font-semibold text-slate-800 mb-3">2 · Lengte</h2>
-            <div className="grid gap-2 sm:grid-cols-2">
-              {(['vol', 'kort'] as ExamLength[]).map((l) => (
-                <button
-                  key={l}
-                  onClick={() => setLength(l)}
-                  className={`text-left rounded-md border px-3 py-3 transition ${
-                    length === l
-                      ? 'border-svm-500 bg-svm-50 ring-1 ring-svm-400'
-                      : 'border-slate-300 hover:bg-slate-50'
-                  }`}
-                >
-                  <div className="font-semibold text-slate-800">
-                    {l === 'vol' ? 'Volledig examen' : 'Korte toets'}
-                  </div>
-                  <div className="text-xs text-slate-500 mt-0.5">
-                    {l === 'vol' ? '± 50 vragen' : '± 25 vragen'}
-                  </div>
-                </button>
-              ))}
-            </div>
-          </section>
+          {mode !== 'BLOOM' && (
+            <section className="bg-white rounded-lg border border-slate-300 p-5">
+              <h2 className="font-semibold text-slate-800 mb-3">2 · Lengte</h2>
+              <div className="grid gap-2 sm:grid-cols-2">
+                {(['vol', 'kort'] as ExamLength[]).map((l) => (
+                  <button
+                    key={l}
+                    onClick={() => setLength(l)}
+                    className={`text-left rounded-md border px-3 py-3 transition ${
+                      length === l
+                        ? 'border-svm-500 bg-svm-50 ring-1 ring-svm-400'
+                        : 'border-slate-300 hover:bg-slate-50'
+                    }`}
+                  >
+                    <div className="font-semibold text-slate-800">
+                      {l === 'vol' ? 'Volledig examen' : 'Korte toets'}
+                    </div>
+                    <div className="text-xs text-slate-500 mt-0.5">
+                      {l === 'vol' ? '± 50 vragen' : '± 25 vragen'}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* Naam */}
           <section className="bg-white rounded-lg border border-slate-300 p-5">

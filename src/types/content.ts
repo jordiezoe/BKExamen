@@ -30,6 +30,8 @@ export type Question =
   | MultiSelectQuestion
   | OpenQuestion
   | TrueFalseQuestion
+  | InvulQuestion
+  | MatchQuestion
 
 interface QuestionBase {
   id: string
@@ -40,6 +42,21 @@ interface QuestionBase {
   image?: LessonImage
   /** Optionele bestek-/tekening-bijlagen (zoals in het echte examen aangeroepen). */
   attachments?: ExamAttachment[]
+  /** Bloom-niveau uit het kwalificatiedossier (K/B/T/A/E/S) — voor het Bloom-examen. */
+  bloom?: Bloom
+}
+
+/** Invulvraag: kandidaat typt zelf het ontbrekende woord, getal of de code in. */
+export interface InvulQuestion extends QuestionBase {
+  type: 'invul'
+  /** Alle acceptabele antwoorden (case-insensitive, spaties genormaliseerd). */
+  acceptableAnswers: string[]
+}
+
+/** Matchvraag: koppel linkeritems aan de juiste rechteritems (gelijk of ongelijk aantal). */
+export interface MatchQuestion extends QuestionBase {
+  type: 'match'
+  pairs: MatchPair[]
 }
 
 /** Bijlage bij een examenvraag: bestek of tekening, met optioneel bladnummer. */

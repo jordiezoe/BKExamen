@@ -12,6 +12,10 @@ import { examenoefening5Vragen } from './examenoefening5'
 import { examenoefening6Vragen } from './examenoefening6'
 import { beeldVragen } from './beeldvragen'
 import { beeldVragen2 } from './beeldvragen2'
+import { bloomExamenA } from './bloomexamenA'
+import { bloomExamenB } from './bloomexamenB'
+import { bloomExamenC } from './bloomexamenC'
+import { bloomExamenD } from './bloomexamenD'
 
 export { topicMetas } from './topicMetas'
 export type { TopicMeta } from './topicMetas'
@@ -63,4 +67,18 @@ export const nieuweVraagIds: Set<string> = new Set(
 const byCode = new Map(topics.map((t) => [t.code, t]))
 export function getTopic(code: string): Topic | undefined {
   return byCode.get(code)
+}
+
+/**
+ * Bloom-examen — een losse, volledige vragenbank (niet gemengd met de
+ * gewone oefentoetsen) die per onderwerp vijf vraagsoorten bevat (mc, multi,
+ * match, invul, open), elk getagd met het Bloom-niveau uit het
+ * kwalificatiedossier. Wordt uitsluitend gebruikt door de modus "Bloom
+ * examen", die alle onderwerpen zonder uitzondering afneemt.
+ */
+export const bloomExamTopics: Record<string, import('../types/content').Question[]> = {
+  ...bloomExamenA,
+  ...bloomExamenB,
+  ...bloomExamenC,
+  ...bloomExamenD,
 }

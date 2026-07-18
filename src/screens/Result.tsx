@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import type { Config, FlatItem, Session } from '../App'
 import { SvmLogo } from '../components/SvmLogo'
 import { Inline } from '../lib/inlineMarkdown'
-import { CESUUR, MODE_TITLES, gradeItem, type ExamQuestion, type Verdict } from '../lib/exam'
+import { CESUUR, MODE_TITLES, gradeItem, type Answer, type ExamQuestion, type Verdict } from '../lib/exam'
 
 function nl(n: number, decimals = 2): string {
   return n.toLocaleString('nl-NL', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })
@@ -275,39 +275,125 @@ function Row({
   )
 }
 
-function Feedback({
-  q,
-  answer,
-}: {
-  q: ExamQuestion
-  answer: { mc?: number; multi?: number[] } | undefined
-}) {
-  const chosen = q.type === 'mc' ? (answer?.mc !== undefined ? [answer.mc] : []) : answer?.multi ?? []
-  const correct = q.type === 'mc' ? [q.correctIndex] : q.correctIndices
+function Feedback({ q, answer }: { q: ExamQuestion; answer: Answer | undefined }) {
   return (
     <div className="pb-3 pl-14 pr-2 text-sm">
-      <ul className="space-y-1">
-        {q.options.map((opt, i) => {
-          const isCorrect = correct.includes(i)
-          const isChosen = chosen.includes(i)
-          return (
-            <li
-              key={i}
-              className={`flex items-start gap-2 ${
-                isCorrect ? 'text-green-700 font-medium' : isChosen ? 'text-red-600' : 'text-slate-600'
-              }`}
-            >
-              <span className="w-4 shrink-0">{isCorrect ? '✓' : isChosen ? '✗' : ''}</span>
-              <span><Inline text={opt} /></span>
-            </li>
-          )
-        })}
-      </ul>
+      {(q.type === 'mc' || q.type === 'multi') && <ChoiceFeedback q={q} answer={answer} />}
+      {q.type === 'invul' && <InvulFeedback q={q} answer={answer} />}
+      {q.type === 'match' && <MatchFeedback q={q} answer={answer} />}
+      {q.type === 'open' && <OpenFeedback q={q} answer={answer} />}
       {q.explanation && (
         <p className="mt-2 text-slate-600 bg-slate-50 border border-slate-200 rounded p-2">
           <Inline text={q.explanation} />
         </p>
       )}
+    </div>
+  )
+}
+
+function ChoiceFeedback({
+  q,
+  answer,
+}: {
+  q: Extract<ExamQuestion, { type: 'mc' | 'multi' }>
+  answer: Answer | undefined
+}) {
+  const chosen = q.type === 'mc' ? (answer?.mc !== undefined ? [answer.mc] : []) : (answer?.multi ?? [])
+  const correct = q.type === 'mc' ? [q.correctIndex] : q.correctIndices
+  return (
+    <ul className="space-y-1">
+      {q.options.map((opt, i) => {
+        const isCorrect = correct.includes(i)
+        const isChosen = chosen.includes(i)
+        return (
+          <li
+            key={i}
+            className={`flex items-start gap-2 ${
+              isCorrect ? 'text-green-700 font-medium' : isChosen ? 'text-red-600' : 'text-slate-600'
+            }`}
+          >
+            <span className="w-4 shrink-0">{isCorrect ? '✓' : isChosen ? '✗' : ''}</span>
+            <span>
+              <Inline text={opt} />
+            </span>
+          </li>
+        )
+      })}
+    </ul>
+  )
+}
+
+function InvulFeedback({
+  q,
+  answer,
+}: {
+  q: Extract<ExamQuestion, { type: 'invul' }>
+  answer: Answer | undefined
+}) {
+  const typed = answer?.invul?.trim()
+  const norm = (s: string) => s.trim().toLowerCase().replace(/\s+/g, ' ')
+  const ok = !!typed && q.acceptableAnswers.some((a) => norm(a) === norm(typed))
+  return (
+    <div className="space-y-1">
+      <p className={ok ? 'text-green-700 font-medium' : 'text-red-600'}>
+        Jouw antwoord: {typed ? typed : <em className="text-slate-400">(niet ingevuld)</em>}
+      </p>
+      <p className="text-slate-600">Juiste antwoord: {q.acceptableAnswers[0]}</p>
+    </div>
+  )
+}
+
+function MatchFeedback({
+  q,
+  answer,
+}: {
+  q: Extract<ExamQuestion, { type: 'match' }>
+  answer: Answer | undefined
+}) {
+  return (
+    <ul className="space-y-1">
+      {q.pairs.map((p, i) => {
+        const chosen = answer?.match?.[i]
+        const ok = chosen === p.right
+        return (
+          <li key={i} className={ok ? 'text-green-700' : 'text-red-600'}>
+            <span className="font-medium">
+              <Inline text={p.left} />
+            </span>{' '}
+            → {chosen ?? <em className="text-slate-400">niet gekozen</em>}
+            {!ok && <span className="text-slate-500"> (juist: {p.right})</span>}
+          </li>
+        )
+      })}
+    </ul>
+  )
+}
+
+function OpenFeedback({
+  q,
+  answer,
+}: {
+  q: Extract<ExamQuestion, { type: 'open' }>
+  answer: Answer | undefined
+}) {
+  const label: Record<'goed' | 'deels' | 'fout', string> = {
+    goed: 'Goed (zelf beoordeeld)',
+    deels: 'Deels goed (zelf beoordeeld)',
+    fout: 'Fout (zelf beoordeeld)',
+  }
+  return (
+    <div className="space-y-2">
+      {answer?.openText && (
+        <p className="text-slate-700">
+          <span className="font-medium">Jouw antwoord: </span>
+          {answer.openText}
+        </p>
+      )}
+      <p className="text-slate-600">
+        <span className="font-medium">Modelantwoord: </span>
+        <Inline text={q.acceptableAnswers[0]} />
+      </p>
+      {answer?.openSelf && <p className="text-slate-500 italic">{label[answer.openSelf]}</p>}
     </div>
   )
 }

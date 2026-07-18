@@ -1,4 +1,4 @@
-import { topics, nieuweVraagIds } from '../content'
+import { topics, nieuweVraagIds, bloomExamTopics, topicMetas } from '../content'
 import type { ExamSection, Niveau, Question } from '../types/content'
 import { shuffleQuestionOptions } from './shuffleOptions'
 
@@ -14,12 +14,11 @@ import { shuffleQuestionOptions } from './shuffleOptions'
  *  - meerkeuze (mc) én meervoudige keuze (multi, met partiële punten).
  */
 
-export type ExamMode = 'BT1' | 'BT2' | 'BT1-2' | 'OEFEN'
+export type ExamMode = 'BT1' | 'BT2' | 'BT1-2' | 'OEFEN' | 'BLOOM'
 export type ExamLength = 'kort' | 'vol'
 
-export type ExamQuestion = MultipleChoiceQ | MultiSelectQ
-type MultipleChoiceQ = Extract<Question, { type: 'mc' }>
-type MultiSelectQ = Extract<Question, { type: 'multi' }>
+/** De vijf vraagsoorten die de examen-engine kan afnemen en nakijken. */
+export type ExamQuestion = Extract<Question, { type: 'mc' | 'multi' | 'invul' | 'match' | 'open' }>
 
 export interface ExamItem {
   question: ExamQuestion
@@ -103,6 +102,8 @@ function shuffle<T>(arr: T[]): T[] {
  * trek daaruit het streefaantal en hussel.
  */
 export function buildExam(mode: ExamMode, length: ExamLength = 'vol'): ExamBlock[] {
+  if (mode === 'BLOOM') return buildBloomExam()
+
   const niveauMap = buildNiveauMap()
   const targets = length === 'kort' ? BLOCK_TARGETS_KORT : BLOCK_TARGETS_VOL
 
@@ -148,6 +149,39 @@ export function buildExam(mode: ExamMode, length: ExamLength = 'vol'): ExamBlock
   return blocks
 }
 
+/**
+ * Bouw het Bloom-examen: een vaste, volledige toets die ALLE onderwerpen
+ * zonder uitzondering bevat (geen steekproef), met per onderwerp de vijf
+ * vraagsoorten (mc, multi, match, invul, open) op het Bloom-niveau dat het
+ * kwalificatiedossier voor dat onderdeel aangeeft. Alleen de vraagvolgorde
+ * binnen elk blok wordt gehusseld.
+ */
+function buildBloomExam(): ExamBlock[] {
+  const blocks: ExamBlock[] = []
+  for (const section of SECTION_ORDER) {
+    const items: ExamItem[] = []
+    for (const meta of topicMetas) {
+      if (meta.section !== section) continue
+      const qs = bloomExamTopics[meta.code] ?? []
+      for (const q of qs) {
+        items.push({
+          question: shuffleQuestionOptions(q as ExamQuestion) as ExamQuestion,
+          topicCode: meta.code,
+          topicTitle: meta.title,
+          section,
+        })
+      }
+    }
+    blocks.push({
+      section,
+      label: SECTION_LABELS[section],
+      intro: SECTION_INTROS[section],
+      items: shuffle(items),
+    })
+  }
+  return blocks
+}
+
 // ---------- Nakijken ----------
 
 export type Verdict = 'goed' | 'deels' | 'fout' | 'leeg'
@@ -156,28 +190,65 @@ export interface Answer {
   /** mc: gekozen index. multi: gekozen indices. */
   mc?: number
   multi?: number[]
+  /** invul: getypte tekst. */
+  invul?: string
+  /** match: paar-index → gekozen rechterlabel. */
+  match?: Record<number, string>
+  /** open: eigen aantekening (niet automatisch nagekeken) + zelfbeoordeling. */
+  openText?: string
+  openSelf?: 'goed' | 'deels' | 'fout'
 }
 
-/** Score-fractie (0..1) en oordeel voor één vraag. */
+function normalizeAnswer(s: string): string {
+  return s.trim().toLowerCase().replace(/\s+/g, ' ')
+}
+
+/** Score-fractie (0..1) en oordeel voor één vraag — dekt alle vijf vraagsoorten. */
 export function gradeItem(
   q: ExamQuestion,
   answer: Answer | undefined,
 ): { fraction: number; verdict: Verdict } {
-  if (!answer || (answer.mc === undefined && (answer.multi === undefined || answer.multi.length === 0))) {
-    return { fraction: 0, verdict: 'leeg' }
-  }
   if (q.type === 'mc') {
+    if (!answer || answer.mc === undefined) return { fraction: 0, verdict: 'leeg' }
     const ok = answer.mc === q.correctIndex
     return { fraction: ok ? 1 : 0, verdict: ok ? 'goed' : 'fout' }
   }
-  const correct = new Set(q.correctIndices)
-  const chosen = answer.multi ?? []
-  let good = 0
-  let bad = 0
-  for (const i of chosen) correct.has(i) ? good++ : bad++
-  const fraction = Math.max(0, (good - bad) / q.correctIndices.length)
-  const verdict: Verdict = fraction >= 1 ? 'goed' : fraction <= 0 ? 'fout' : 'deels'
-  return { fraction: Math.min(1, fraction), verdict }
+
+  if (q.type === 'multi') {
+    if (!answer || !answer.multi || answer.multi.length === 0) return { fraction: 0, verdict: 'leeg' }
+    const correct = new Set(q.correctIndices)
+    let good = 0
+    let bad = 0
+    for (const i of answer.multi) correct.has(i) ? good++ : bad++
+    const fraction = Math.max(0, (good - bad) / q.correctIndices.length)
+    const verdict: Verdict = fraction >= 1 ? 'goed' : fraction <= 0 ? 'fout' : 'deels'
+    return { fraction: Math.min(1, fraction), verdict }
+  }
+
+  if (q.type === 'invul') {
+    if (!answer || !answer.invul || !answer.invul.trim()) return { fraction: 0, verdict: 'leeg' }
+    const typed = normalizeAnswer(answer.invul)
+    const ok = q.acceptableAnswers.some((a) => normalizeAnswer(a) === typed)
+    return { fraction: ok ? 1 : 0, verdict: ok ? 'goed' : 'fout' }
+  }
+
+  if (q.type === 'match') {
+    if (!answer || !answer.match || Object.keys(answer.match).length === 0) {
+      return { fraction: 0, verdict: 'leeg' }
+    }
+    let good = 0
+    q.pairs.forEach((p, i) => {
+      if (answer.match?.[i] === p.right) good++
+    })
+    const fraction = good / q.pairs.length
+    const verdict: Verdict = fraction >= 1 ? 'goed' : fraction <= 0 ? 'fout' : 'deels'
+    return { fraction, verdict }
+  }
+
+  // 'open' — de kandidaat beoordeelt zichzelf tegen het modelantwoord.
+  if (!answer || !answer.openSelf) return { fraction: 0, verdict: 'leeg' }
+  const openFraction: Record<'goed' | 'deels' | 'fout', number> = { goed: 1, deels: 0.5, fout: 0 }
+  return { fraction: openFraction[answer.openSelf], verdict: answer.openSelf }
 }
 
 export const MODE_LABELS: Record<ExamMode, string> = {
@@ -185,6 +256,7 @@ export const MODE_LABELS: Record<ExamMode, string> = {
   BT2: 'BT2 — toepassen en analyseren',
   'BT1-2': 'BT1-2 eindsimulatie',
   OEFEN: 'Examen-oefening — nieuwe vragen',
+  BLOOM: 'Bloom-examen — alle onderwerpen, alle vraagvormen',
 }
 
 export const MODE_TITLES: Record<ExamMode, string> = {
@@ -192,4 +264,5 @@ export const MODE_TITLES: Record<ExamMode, string> = {
   BT2: 'Bouwkunde BT2 Proeftoets',
   'BT1-2': 'Bouwkunde BT1-2 Proeftoets',
   OEFEN: 'Bouwkunde Examen-oefening',
+  BLOOM: 'Bouwkunde Bloom-examen',
 }
