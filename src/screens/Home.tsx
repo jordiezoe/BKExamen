@@ -11,6 +11,9 @@ const MODE_TILE: Record<ExamMode, { title: string; sub: string }> = {
   'BT1-2': { title: 'BT1-2', sub: 'eindsimulatie' },
   OEFEN: { title: 'Oefening', sub: 'alleen nieuwe vragen' },
   BLOOM: { title: 'Bloom examen', sub: 'alle onderwerpen, alle vraagvormen' },
+  // HERKANSING is niet los te kiezen op het startscherm; je komt er via de
+  // "Herkansing"-knop op de resultaatpagina. Alleen hier voor het Record-type.
+  HERKANSING: { title: 'Herkansing', sub: 'oefen je foute vragen opnieuw' },
 }
 
 export function Home({

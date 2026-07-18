@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import type { Config, FlatItem, Session } from '../App'
 import { SvmLogo } from '../components/SvmLogo'
 import { Inline } from '../lib/inlineMarkdown'
-import { CESUUR, MODE_TITLES, gradeItem, type Answer, type ExamQuestion, type Verdict } from '../lib/exam'
+import { CESUUR, MODE_TITLES, gradeItem, type Answer, type ExamItem, type ExamQuestion, type Verdict } from '../lib/exam'
 
 function nl(n: number, decimals = 2): string {
   return n.toLocaleString('nl-NL', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })
@@ -42,11 +42,13 @@ export function Result({
   flat,
   onHome,
   onRestart,
+  onRetry,
 }: {
   session: Session
   flat: FlatItem[]
   onHome: () => void
   onRestart: (config: Config) => void
+  onRetry: (items: ExamItem[]) => void
 }) {
   const [openId, setOpenId] = useState<string | null>(null)
 
@@ -104,6 +106,11 @@ export function Result({
 
   const aandacht = perTopic.filter((t) => t.pct < CESUUR * 100)
 
+  // Vragen die niet (volledig) goed waren — basis voor de herkansing.
+  const notMastered = graded.filter((g) => g.verdict !== 'goed')
+  const isHerkansing = session.config.mode === 'HERKANSING'
+  const round = session.retryRound ?? 0
+
   const duurMin = session.finishedAt
     ? Math.max(1, Math.round((session.finishedAt - session.startedAt) / 60000))
     : 0
@@ -114,6 +121,7 @@ export function Result({
         <div className="max-w-3xl mx-auto px-4 sm:px-5 py-3 flex items-start justify-between gap-3">
           <h1 className="font-bold text-base sm:text-xl text-slate-800 leading-tight">
             Resultaat {MODE_TITLES[session.config.mode]}
+            {isHerkansing && round > 0 && <span className="font-normal text-slate-500"> — ronde {round}</span>}
           </h1>
           <SvmLogo className="hidden sm:flex" />
         </div>
@@ -185,6 +193,38 @@ export function Result({
                     </li>
                   ))}
                 </ul>
+              )}
+            </div>
+          </section>
+
+          {/* ── Herkansing ── */}
+          <section className="bg-white border border-slate-300 rounded-sm overflow-hidden">
+            <div className="svm-blockbar px-3 py-2 font-bold text-slate-800">Herkansing</div>
+            <div className="p-4">
+              {notMastered.length === 0 ? (
+                <p className="text-sm text-slate-700">
+                  {isHerkansing ? (
+                    <>
+                      🎉 <b>Foutloos!</b> Je hebt nu alle vragen uit deze herkansing goed. Niets meer om
+                      te herkansen.
+                    </>
+                  ) : (
+                    'Alle vragen waren goed — niets om te herkansen. 🎉'
+                  )}
+                </p>
+              ) : (
+                <>
+                  <p className="text-sm text-slate-700 mb-3">
+                    {notMastered.length} van de {total} vragen waren niet (volledig) goed. Oefen ze
+                    apart opnieuw — je kunt dit net zo vaak herhalen tot je ze allemaal foutloos hebt.
+                  </p>
+                  <button
+                    onClick={() => onRetry(notMastered.map((g) => g.flat.item))}
+                    className="w-full svm-blockbar rounded-md py-3 font-bold text-slate-800 hover:brightness-105"
+                  >
+                    Herkansing: oefen deze {notMastered.length} vragen opnieuw
+                  </button>
+                </>
               )}
             </div>
           </section>

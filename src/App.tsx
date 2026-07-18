@@ -2,7 +2,15 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Home } from './screens/Home'
 import { ExamScreen } from './screens/Exam'
 import { Result } from './screens/Result'
-import { buildExam, type Answer, type ExamBlock, type ExamItem, type ExamLength, type ExamMode } from './lib/exam'
+import {
+  buildExam,
+  buildRetryBlocks,
+  type Answer,
+  type ExamBlock,
+  type ExamItem,
+  type ExamLength,
+  type ExamMode,
+} from './lib/exam'
 
 export type Phase = 'home' | 'exam' | 'result'
 
@@ -20,6 +28,8 @@ export interface Session {
   index: number
   startedAt: number
   finishedAt: number | null
+  /** Hoeveelste herkansingsronde dit is (1, 2, 3, …) — alleen bij mode 'HERKANSING'. */
+  retryRound?: number
 }
 
 export interface FlatItem {
@@ -108,6 +118,28 @@ export function App() {
     setPhase('exam')
   }
 
+  /** Start een herkansingsronde met alleen de vragen die niet (volledig) goed waren. */
+  function startRetry(items: ExamItem[]) {
+    setSession((s) => {
+      const blocks = buildRetryBlocks(items)
+      const candidate = s?.config.candidate ?? localStorage.getItem(NAME_KEY) ?? 'Kandidaat'
+      const prevRound = s?.config.mode === 'HERKANSING' ? (s.retryRound ?? 1) : 0
+      return {
+        config: { mode: 'HERKANSING', length: 'vol', candidate },
+        blocks,
+        answers: {},
+        flagged: {},
+        index: 0,
+        startedAt: Date.now(),
+        finishedAt: null,
+        retryRound: prevRound + 1,
+      }
+    })
+    setNow(Date.now())
+    setPhase('exam')
+    window.scrollTo(0, 0)
+  }
+
   function update(patch: Partial<Session>) {
     setSession((s) => (s ? { ...s, ...patch } : s))
   }
@@ -138,7 +170,9 @@ export function App() {
   }
 
   if (phase === 'result') {
-    return <Result session={session} flat={flat} onHome={exitToHome} onRestart={startExam} />
+    return (
+      <Result session={session} flat={flat} onHome={exitToHome} onRestart={startExam} onRetry={startRetry} />
+    )
   }
 
   return (

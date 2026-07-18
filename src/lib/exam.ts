@@ -14,7 +14,7 @@ import { shuffleQuestionOptions } from './shuffleOptions'
  *  - meerkeuze (mc) én meervoudige keuze (multi, met partiële punten).
  */
 
-export type ExamMode = 'BT1' | 'BT2' | 'BT1-2' | 'OEFEN' | 'BLOOM'
+export type ExamMode = 'BT1' | 'BT2' | 'BT1-2' | 'OEFEN' | 'BLOOM' | 'HERKANSING'
 export type ExamLength = 'kort' | 'vol'
 
 /** De vijf vraagsoorten die de examen-engine kan afnemen en nakijken. */
@@ -182,6 +182,52 @@ function buildBloomExam(): ExamBlock[] {
   return blocks
 }
 
+/**
+ * Husselt mc/multi-opties opnieuw met een ECHTE (niet-geseede) willekeur,
+ * los van de stabiele per-vraag-shuffle van shuffleQuestionOptions. Gebruikt
+ * bij herkansingen, zodat de juiste optie niet steeds op dezelfde plek staat
+ * en je niet op positie kunt gokken.
+ */
+function reshuffleForRetry<Q extends Question>(q: Q): Q {
+  if (q.type !== 'mc' && q.type !== 'multi') return q
+  const order = shuffle(q.options.map((_, i) => i))
+  const options = order.map((i) => q.options[i])
+  if (q.type === 'multi') {
+    const correctIndices = q.correctIndices.map((c) => order.indexOf(c)).sort((a, b) => a - b)
+    return { ...q, options, correctIndices } as Q
+  }
+  const correctIndex = order.indexOf(q.correctIndex)
+  return { ...q, options, correctIndex } as Q
+}
+
+/**
+ * Bouw een herkansingsronde uit een lijst vragen die de vorige keer niet
+ * (volledig) goed werden beantwoord. Groepeert per blok (A/B/C/D), laat lege
+ * blokken weg, en hersshuffelt mc/multi-opties zodat de juiste positie niet
+ * simpelweg te onthouden is.
+ */
+export function buildRetryBlocks(items: ExamItem[]): ExamBlock[] {
+  const bySection = new Map<ExamSection, ExamItem[]>()
+  for (const it of items) {
+    const reshuffled: ExamItem = { ...it, question: reshuffleForRetry(it.question) }
+    const arr = bySection.get(it.section)
+    if (arr) arr.push(reshuffled)
+    else bySection.set(it.section, [reshuffled])
+  }
+  const blocks: ExamBlock[] = []
+  for (const section of SECTION_ORDER) {
+    const secItems = bySection.get(section)
+    if (!secItems || secItems.length === 0) continue
+    blocks.push({
+      section,
+      label: SECTION_LABELS[section],
+      intro: SECTION_INTROS[section],
+      items: shuffle(secItems),
+    })
+  }
+  return blocks
+}
+
 // ---------- Nakijken ----------
 
 export type Verdict = 'goed' | 'deels' | 'fout' | 'leeg'
@@ -257,6 +303,7 @@ export const MODE_LABELS: Record<ExamMode, string> = {
   'BT1-2': 'BT1-2 eindsimulatie',
   OEFEN: 'Examen-oefening — nieuwe vragen',
   BLOOM: 'Bloom-examen — alle onderwerpen, alle vraagvormen',
+  HERKANSING: 'Herkansing — oefen je foute vragen opnieuw',
 }
 
 export const MODE_TITLES: Record<ExamMode, string> = {
@@ -265,4 +312,5 @@ export const MODE_TITLES: Record<ExamMode, string> = {
   'BT1-2': 'Bouwkunde BT1-2 Proeftoets',
   OEFEN: 'Bouwkunde Examen-oefening',
   BLOOM: 'Bouwkunde Bloom-examen',
+  HERKANSING: 'Bouwkunde Herkansing',
 }
