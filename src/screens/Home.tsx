@@ -1,9 +1,15 @@
 import { useState } from 'react'
 import type { Config } from '../App'
 import { SvmLogo } from '../components/SvmLogo'
+import { bloomExamTotalCount } from '../content'
 import { type ExamLength, type ExamMode } from '../lib/exam'
 
 const MODES: ExamMode[] = ['BT1', 'BT2', 'BT1-2', 'OEFEN', 'BLOOM']
+
+const NORMAL_LENGTHS: { key: ExamLength; title: string; sub: string }[] = [
+  { key: 'vol', title: 'Volledig examen', sub: '± 50 vragen' },
+  { key: 'kort', title: 'Korte toets', sub: '± 25 vragen' },
+]
 
 const MODE_TILE: Record<ExamMode, { title: string; sub: string }> = {
   BT1: { title: 'BT1', sub: 'kennen en herkennen' },
@@ -26,6 +32,18 @@ export function Home({
   const [mode, setMode] = useState<ExamMode>('BT1-2')
   const [length, setLength] = useState<ExamLength>('vol')
   const [candidate, setCandidate] = useState(defaultName)
+
+  const bloomLengths: { key: ExamLength; title: string; sub: string }[] = [
+    { key: '30', title: '30 vragen', sub: 'korte selectie' },
+    { key: '50', title: '50 vragen', sub: 'gemiddelde toets' },
+    { key: 'vol', title: 'Volledig examen', sub: `alle ${bloomExamTotalCount} vragen` },
+  ]
+  const lengthOptions = mode === 'BLOOM' ? bloomLengths : NORMAL_LENGTHS
+
+  function selectMode(m: ExamMode) {
+    setMode(m)
+    setLength('vol')
+  }
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col">
@@ -60,7 +78,7 @@ export function Home({
               {MODES.map((m) => (
                 <button
                   key={m}
-                  onClick={() => setMode(m)}
+                  onClick={() => selectMode(m)}
                   className={`text-left rounded-md border px-3 py-3 transition ${
                     mode === m
                       ? 'border-svm-500 bg-svm-50 ring-1 ring-svm-400'
@@ -82,38 +100,33 @@ export function Home({
               <p className="mt-3 text-xs text-slate-500">
                 Het Bloom-examen dekt <b>elk onderwerp</b> uit het kwalificatiedossier, met vijf
                 vraagsoorten (meerkeuze, meerantwoord, match, invul en open vragen) op het
-                Bloom-niveau (kennis t/m evalueren) dat bij dat onderdeel hoort. Dit is een lange,
-                volledige toets — de lengte-instelling hieronder is hierbij niet van toepassing.
+                Bloom-niveau (kennis t/m evalueren) dat bij dat onderdeel hoort. Kies hieronder een
+                lengte — bij 30 of 50 vragen wordt een willekeurige, evenredig over de blokken
+                verdeelde selectie getrokken.
               </p>
             )}
           </section>
 
           {/* Lengte */}
-          {mode !== 'BLOOM' && (
-            <section className="bg-white rounded-lg border border-slate-300 p-5">
-              <h2 className="font-semibold text-slate-800 mb-3">2 · Lengte</h2>
-              <div className="grid gap-2 sm:grid-cols-2">
-                {(['vol', 'kort'] as ExamLength[]).map((l) => (
-                  <button
-                    key={l}
-                    onClick={() => setLength(l)}
-                    className={`text-left rounded-md border px-3 py-3 transition ${
-                      length === l
-                        ? 'border-svm-500 bg-svm-50 ring-1 ring-svm-400'
-                        : 'border-slate-300 hover:bg-slate-50'
-                    }`}
-                  >
-                    <div className="font-semibold text-slate-800">
-                      {l === 'vol' ? 'Volledig examen' : 'Korte toets'}
-                    </div>
-                    <div className="text-xs text-slate-500 mt-0.5">
-                      {l === 'vol' ? '± 50 vragen' : '± 25 vragen'}
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </section>
-          )}
+          <section className="bg-white rounded-lg border border-slate-300 p-5">
+            <h2 className="font-semibold text-slate-800 mb-3">2 · Lengte</h2>
+            <div className={`grid gap-2 ${mode === 'BLOOM' ? 'sm:grid-cols-3' : 'sm:grid-cols-2'}`}>
+              {lengthOptions.map((l) => (
+                <button
+                  key={l.key}
+                  onClick={() => setLength(l.key)}
+                  className={`text-left rounded-md border px-3 py-3 transition ${
+                    length === l.key
+                      ? 'border-svm-500 bg-svm-50 ring-1 ring-svm-400'
+                      : 'border-slate-300 hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="font-semibold text-slate-800">{l.title}</div>
+                  <div className="text-xs text-slate-500 mt-0.5">{l.sub}</div>
+                </button>
+              ))}
+            </div>
+          </section>
 
           {/* Naam */}
           <section className="bg-white rounded-lg border border-slate-300 p-5">

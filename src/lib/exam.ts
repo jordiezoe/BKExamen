@@ -15,7 +15,7 @@ import { shuffleQuestionOptions } from './shuffleOptions'
  */
 
 export type ExamMode = 'BT1' | 'BT2' | 'BT1-2' | 'OEFEN' | 'BLOOM' | 'HERKANSING'
-export type ExamLength = 'kort' | 'vol'
+export type ExamLength = 'kort' | 'vol' | '30' | '50'
 
 /** De vijf vraagsoorten die de examen-engine kan afnemen en nakijken. */
 export type ExamQuestion = Extract<Question, { type: 'mc' | 'multi' | 'invul' | 'match' | 'open' }>
@@ -102,7 +102,7 @@ function shuffle<T>(arr: T[]): T[] {
  * trek daaruit het streefaantal en hussel.
  */
 export function buildExam(mode: ExamMode, length: ExamLength = 'vol'): ExamBlock[] {
-  if (mode === 'BLOOM') return buildBloomExam()
+  if (mode === 'BLOOM') return buildBloomExam(length)
 
   const niveauMap = buildNiveauMap()
   const targets = length === 'kort' ? BLOCK_TARGETS_KORT : BLOCK_TARGETS_VOL
@@ -150,21 +150,45 @@ export function buildExam(mode: ExamMode, length: ExamLength = 'vol'): ExamBlock
 }
 
 /**
- * Bouw het Bloom-examen: een vaste, volledige toets die ALLE onderwerpen
- * zonder uitzondering bevat (geen steekproef), met per onderwerp de vijf
- * vraagsoorten (mc, multi, match, invul, open) op het Bloom-niveau dat het
- * kwalificatiedossier voor dat onderdeel aangeeft. Alleen de vraagvolgorde
- * binnen elk blok wordt gehusseld.
+ * Verdeel een totaalaantal vragen proportioneel over de blokken, naar
+ * verhouding van de beschikbare pool per blok. Grootste resten krijgen
+ * voorrang zodat de som exact op `total` uitkomt.
  */
-function buildBloomExam(): ExamBlock[] {
-  const blocks: ExamBlock[] = []
+function proportionalSplit(
+  total: number,
+  pool: Record<ExamSection, number>,
+): Record<ExamSection, number> {
+  const grandTotal = SECTION_ORDER.reduce((s, sec) => s + pool[sec], 0)
+  const base = SECTION_ORDER.map((sec) => {
+    const exact = grandTotal > 0 ? (pool[sec] / grandTotal) * total : 0
+    return { sec, n: Math.floor(exact), rem: exact - Math.floor(exact) }
+  })
+  let remaining = total - base.reduce((s, b) => s + b.n, 0)
+  for (const b of [...base].sort((a, b) => b.rem - a.rem)) {
+    if (remaining <= 0) break
+    b.n++
+    remaining--
+  }
+  const out = {} as Record<ExamSection, number>
+  for (const b of base) out[b.sec] = Math.min(b.n, pool[b.sec])
+  return out
+}
+
+/**
+ * Bouw het Bloom-examen: dekt ALLE onderwerpen met de vijf vraagsoorten (mc,
+ * multi, match, invul, open) op het Bloom-niveau uit het kwalificatiedossier.
+ * Bij "vol" komt de complete vragenbank aan bod; bij "30"/"50" wordt een
+ * proportionele, willekeurige steekproef per blok getrokken zodat elke
+ * ronde anders is maar de verhouding tussen de blokken bewaard blijft.
+ */
+function buildBloomExam(length: ExamLength): ExamBlock[] {
+  const pools: Record<ExamSection, ExamItem[]> = { A: [], B: [], C: [], D: [] }
   for (const section of SECTION_ORDER) {
-    const items: ExamItem[] = []
     for (const meta of topicMetas) {
       if (meta.section !== section) continue
       const qs = bloomExamTopics[meta.code] ?? []
       for (const q of qs) {
-        items.push({
+        pools[section].push({
           question: shuffleQuestionOptions(q as ExamQuestion) as ExamQuestion,
           topicCode: meta.code,
           topicTitle: meta.title,
@@ -172,11 +196,21 @@ function buildBloomExam(): ExamBlock[] {
         })
       }
     }
+  }
+
+  const poolSizes = { A: pools.A.length, B: pools.B.length, C: pools.C.length, D: pools.D.length }
+  const total = length === '30' ? 30 : length === '50' ? 50 : undefined
+  const targets = total ? proportionalSplit(total, poolSizes) : poolSizes
+
+  const blocks: ExamBlock[] = []
+  for (const section of SECTION_ORDER) {
+    const target = Math.min(targets[section], pools[section].length)
+    const picked = total ? pickRandom(pools[section], target) : pools[section]
     blocks.push({
       section,
       label: SECTION_LABELS[section],
       intro: SECTION_INTROS[section],
-      items: shuffle(items),
+      items: shuffle(picked),
     })
   }
   return blocks

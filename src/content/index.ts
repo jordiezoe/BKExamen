@@ -95,3 +95,9 @@ export const bloomExamTopics: Record<string, import('../types/content').Question
   }
   return acc
 }, {})
+
+/** Totaal aantal Bloom-examenvragen, voor weergave in de lengte-keuze. */
+export const bloomExamTotalCount = Object.values(bloomExamTopics).reduce(
+  (n, qs) => n + qs.length,
+  0,
+)
