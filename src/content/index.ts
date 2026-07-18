@@ -20,6 +20,7 @@ import { bloomExamenA2 } from './bloomexamenA2'
 import { bloomExamenB2 } from './bloomexamenB2'
 import { bloomExamenC2 } from './bloomexamenC2'
 import { bloomExamenD2 } from './bloomexamenD2'
+import { bestekExamTopics } from './bestekTekeningLezen'
 
 export { topicMetas } from './topicMetas'
 export type { TopicMeta } from './topicMetas'
@@ -98,6 +99,18 @@ export const bloomExamTopics: Record<string, import('../types/content').Question
 
 /** Totaal aantal Bloom-examenvragen, voor weergave in de lengte-keuze. */
 export const bloomExamTotalCount = Object.values(bloomExamTopics).reduce(
+  (n, qs) => n + qs.length,
+  0,
+)
+
+/**
+ * Bestek en tekening lezen (BL) — losse praktijktoets op het echte
+ * examenbestek en de bijbehorende tekeningen. Telt niet mee in de gewone
+ * BT1/BT2/BLOOM-examens; wordt uitsluitend gebruikt door de modus "BESTEK".
+ */
+export { bestekExamTopics }
+
+export const bestekExamTotalCount = Object.values(bestekExamTopics).reduce(
   (n, qs) => n + qs.length,
   0,
 )

@@ -1,5 +1,5 @@
-import { topics, nieuweVraagIds, bloomExamTopics, topicMetas } from '../content'
-import type { ExamSection, Niveau, Question } from '../types/content'
+import { topics, nieuweVraagIds, bloomExamTopics, bestekExamTopics, topicMetas } from '../content'
+import type { ExamSection, Niveau, Question, Section } from '../types/content'
 import { shuffleQuestionOptions } from './shuffleOptions'
 
 /**
@@ -14,7 +14,7 @@ import { shuffleQuestionOptions } from './shuffleOptions'
  *  - meerkeuze (mc) én meervoudige keuze (multi, met partiële punten).
  */
 
-export type ExamMode = 'BT1' | 'BT2' | 'BT1-2' | 'OEFEN' | 'BLOOM' | 'HERKANSING'
+export type ExamMode = 'BT1' | 'BT2' | 'BT1-2' | 'OEFEN' | 'BLOOM' | 'HERKANSING' | 'BESTEK'
 export type ExamLength = 'kort' | 'vol' | '30' | '50'
 
 /** De vijf vraagsoorten die de examen-engine kan afnemen en nakijken. */
@@ -24,11 +24,12 @@ export interface ExamItem {
   question: ExamQuestion
   topicCode: string
   topicTitle: string
-  section: ExamSection
+  /** A-D voor de dossiersecties, of 'BL' voor Bestek en tekening lezen. */
+  section: Section
 }
 
 export interface ExamBlock {
-  section: ExamSection
+  section: Section
   label: string
   intro: string
   items: ExamItem[]
@@ -103,6 +104,7 @@ function shuffle<T>(arr: T[]): T[] {
  */
 export function buildExam(mode: ExamMode, length: ExamLength = 'vol'): ExamBlock[] {
   if (mode === 'BLOOM') return buildBloomExam(length)
+  if (mode === 'BESTEK') return buildBestekExam(length)
 
   const niveauMap = buildNiveauMap()
   const targets = length === 'kort' ? BLOCK_TARGETS_KORT : BLOCK_TARGETS_VOL
@@ -216,6 +218,49 @@ function buildBloomExam(length: ExamLength): ExamBlock[] {
   return blocks
 }
 
+const BESTEK_LABEL = 'Bestek en tekening lezen'
+const BESTEK_INTRO =
+  'Dit onderdeel test of je een STABU-bestek en de bijbehorende bouwtekeningen zelfstandig kunt ' +
+  'raadplegen en toepassen — met het echte examenbestek "Examenadviesburo 2016-I" en de bijbehorende ' +
+  'tekeningen, net als bij het echte BT1/BT2-examen. Gebruik de bijgevoegde bijlagen (📎) en ' +
+  'afbeeldingen om de vragen te beantwoorden.'
+
+/** Bij "korte toets" wordt de helft van de vragenbank getrokken. */
+function bestekTarget(length: ExamLength, total: number): number {
+  return length === 'kort' ? Math.max(1, Math.ceil(total / 2)) : total
+}
+
+/**
+ * Bouw de toets "Bestek en tekening lezen": één praktijkgericht blok dat alle
+ * BL-onderwerpen (BL.1 t/m BL.8) samenvoegt tot één vragenlijst, met
+ * verwijzingen naar het echte examenbestek en de tekeningen als bijlage.
+ */
+function buildBestekExam(length: ExamLength): ExamBlock[] {
+  const items: ExamItem[] = []
+  for (const meta of topicMetas) {
+    if (meta.section !== 'BL') continue
+    const qs = bestekExamTopics[meta.code] ?? []
+    for (const q of qs) {
+      items.push({
+        question: shuffleQuestionOptions(q as ExamQuestion) as ExamQuestion,
+        topicCode: meta.code,
+        topicTitle: meta.title,
+        section: 'BL',
+      })
+    }
+  }
+  const target = bestekTarget(length, items.length)
+  const picked = target < items.length ? pickRandom(items, target) : items
+  return [
+    {
+      section: 'BL',
+      label: BESTEK_LABEL,
+      intro: BESTEK_INTRO,
+      items: shuffle(picked),
+    },
+  ]
+}
+
 /**
  * Husselt mc/multi-opties opnieuw met een ECHTE (niet-geseede) willekeur,
  * los van de stabiele per-vraag-shuffle van shuffleQuestionOptions. Gebruikt
@@ -241,7 +286,7 @@ function reshuffleForRetry<Q extends Question>(q: Q): Q {
  * simpelweg te onthouden is.
  */
 export function buildRetryBlocks(items: ExamItem[]): ExamBlock[] {
-  const bySection = new Map<ExamSection, ExamItem[]>()
+  const bySection = new Map<Section, ExamItem[]>()
   for (const it of items) {
     const reshuffled: ExamItem = { ...it, question: reshuffleForRetry(it.question) }
     const arr = bySection.get(it.section)
@@ -249,13 +294,13 @@ export function buildRetryBlocks(items: ExamItem[]): ExamBlock[] {
     else bySection.set(it.section, [reshuffled])
   }
   const blocks: ExamBlock[] = []
-  for (const section of SECTION_ORDER) {
+  for (const section of [...SECTION_ORDER, 'BL' as const]) {
     const secItems = bySection.get(section)
     if (!secItems || secItems.length === 0) continue
     blocks.push({
       section,
-      label: SECTION_LABELS[section],
-      intro: SECTION_INTROS[section],
+      label: section === 'BL' ? BESTEK_LABEL : SECTION_LABELS[section],
+      intro: section === 'BL' ? BESTEK_INTRO : SECTION_INTROS[section],
       items: shuffle(secItems),
     })
   }
@@ -338,6 +383,7 @@ export const MODE_LABELS: Record<ExamMode, string> = {
   OEFEN: 'Examen-oefening — nieuwe vragen',
   BLOOM: 'Bloom-examen — alle onderwerpen, alle vraagvormen',
   HERKANSING: 'Herkansing — oefen je foute vragen opnieuw',
+  BESTEK: 'Bestek en tekening lezen — het echte examenbestek raadplegen',
 }
 
 export const MODE_TITLES: Record<ExamMode, string> = {
@@ -347,4 +393,5 @@ export const MODE_TITLES: Record<ExamMode, string> = {
   OEFEN: 'Bouwkunde Examen-oefening',
   BLOOM: 'Bouwkunde Bloom-examen',
   HERKANSING: 'Bouwkunde Herkansing',
+  BESTEK: 'Bouwkunde Bestek en tekening lezen',
 }

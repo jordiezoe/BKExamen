@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import type { Config } from '../App'
 import { SvmLogo } from '../components/SvmLogo'
-import { bloomExamTotalCount } from '../content'
+import { bloomExamTotalCount, bestekExamTotalCount } from '../content'
 import { type ExamLength, type ExamMode } from '../lib/exam'
 
-const MODES: ExamMode[] = ['BT1', 'BT2', 'BT1-2', 'OEFEN', 'BLOOM']
+const MODES: ExamMode[] = ['BT1', 'BT2', 'BT1-2', 'OEFEN', 'BLOOM', 'BESTEK']
 
 const NORMAL_LENGTHS: { key: ExamLength; title: string; sub: string }[] = [
   { key: 'vol', title: 'Volledig examen', sub: '± 50 vragen' },
@@ -17,6 +17,7 @@ const MODE_TILE: Record<ExamMode, { title: string; sub: string }> = {
   'BT1-2': { title: 'BT1-2', sub: 'eindsimulatie' },
   OEFEN: { title: 'Oefening', sub: 'alleen nieuwe vragen' },
   BLOOM: { title: 'Bloom examen', sub: 'alle onderwerpen, alle vraagvormen' },
+  BESTEK: { title: 'Bestek & tekening', sub: 'het echte examenbestek raadplegen' },
   // HERKANSING is niet los te kiezen op het startscherm; je komt er via de
   // "Herkansing"-knop op de resultaatpagina. Alleen hier voor het Record-type.
   HERKANSING: { title: 'Herkansing', sub: 'oefen je foute vragen opnieuw' },
@@ -38,7 +39,11 @@ export function Home({
     { key: '50', title: '50 vragen', sub: 'gemiddelde toets' },
     { key: 'vol', title: 'Volledig examen', sub: `alle ${bloomExamTotalCount} vragen` },
   ]
-  const lengthOptions = mode === 'BLOOM' ? bloomLengths : NORMAL_LENGTHS
+  const bestekLengths: { key: ExamLength; title: string; sub: string }[] = [
+    { key: 'vol', title: 'Volledig examen', sub: `alle ${bestekExamTotalCount} vragen` },
+    { key: 'kort', title: 'Korte toets', sub: `± ${Math.ceil(bestekExamTotalCount / 2)} vragen` },
+  ]
+  const lengthOptions = mode === 'BLOOM' ? bloomLengths : mode === 'BESTEK' ? bestekLengths : NORMAL_LENGTHS
 
   function selectMode(m: ExamMode) {
     setMode(m)
@@ -74,7 +79,7 @@ export function Home({
           {/* Modus */}
           <section className="bg-white rounded-lg border border-slate-300 p-5">
             <h2 className="font-semibold text-slate-800 mb-3">1 · Kies je toets</h2>
-            <div className="grid gap-2 grid-cols-2 sm:grid-cols-5">
+            <div className="grid gap-2 grid-cols-2 sm:grid-cols-3">
               {MODES.map((m) => (
                 <button
                   key={m}
@@ -105,12 +110,20 @@ export function Home({
                 verdeelde selectie getrokken.
               </p>
             )}
+            {mode === 'BESTEK' && (
+              <p className="mt-3 text-xs text-slate-500">
+                Deze toets draait om het <b>echte examenbestek en de bijbehorende tekeningen</b>{' '}
+                ("Examenadviesburo 2016-I") — precies zoals in het echte examen. Bij de vragen zit
+                een uitgesneden stukje tekening of een 📎 knop waarmee je het volledige bestek of de
+                tekeningen erbij kunt pakken om het antwoord op te zoeken.
+              </p>
+            )}
           </section>
 
           {/* Lengte */}
           <section className="bg-white rounded-lg border border-slate-300 p-5">
             <h2 className="font-semibold text-slate-800 mb-3">2 · Lengte</h2>
-            <div className={`grid gap-2 ${mode === 'BLOOM' ? 'sm:grid-cols-3' : 'sm:grid-cols-2'}`}>
+            <div className={`grid gap-2 ${lengthOptions.length === 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2'}`}>
               {lengthOptions.map((l) => (
                 <button
                   key={l.key}

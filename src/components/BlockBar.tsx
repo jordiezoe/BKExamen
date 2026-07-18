@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { ExamSection } from '../types/content'
+import type { Section } from '../types/content'
 
 /** Oranje blokbalk met de bloktitel en een Blokintroductie-knop (popover). */
 export function BlockBar({
@@ -7,7 +7,7 @@ export function BlockBar({
   label,
   intro,
 }: {
-  section: ExamSection
+  section: Section
   label: string
   intro: string
 }) {
