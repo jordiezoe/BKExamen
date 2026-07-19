@@ -60,4 +60,8 @@ export const topicMetas: TopicMeta[] = [
   { code: 'BL.6',  section: 'BL', title: 'Installatietekeningen lezen',               blurb: 'Symbolen en leidingverloop op riolering-, water-, gas-, elektra- en ventilatietekeningen herkennen.' },
   { code: 'BL.7',  section: 'BL', title: 'Praktijk: het examenbestek en de tekeningen', blurb: 'Casusvragen waarbij je het echte examenbestek en de bijbehorende tekeningen (BLAD-verwijzingen) raadpleegt.' },
   { code: 'BL.8',  section: 'BL', title: 'Een bestek gebruiken: opzoeken en toepassen', blurb: 'Stap voor stap iets opzoeken in een bestek, de STABU-hoofdstukindeling gebruiken en bestek en tekening combineren tot een antwoord.' },
+  { code: 'BL.9',  section: 'BL', title: 'Symbolen: deuren en ramen',                 blurb: 'Herken deur- en raamsymbolen (draai, schuif, vouw, draaikiep) en de betekenis van volle/gestippelde lijnen.' },
+  { code: 'BL.10', section: 'BL', title: 'Symbolen: materialen en arceringen',        blurb: 'Herken arceringen voor metselwerk, beton (gewapend/ongewapend), kalkzandsteen, isolatie en lichte scheidingswanden.' },
+  { code: 'BL.11', section: 'BL', title: 'Symbolen: elektra, verwarming en ventilatie', blurb: 'Herken installatiesymbolen: schakelaar, wandcontactdoos, lichtpunt, radiator, vloerverwarming, afzuig- en toevoerpunt.' },
+  { code: 'BL.12', section: 'BL', title: 'Symbolen: sanitair, trap en algemeen',      blurb: 'Herken wc, douche en bad, de looprichting bij een trapsymbool, en algemene aanduidingen als noordpijl, peil en hwa.' },
 ]

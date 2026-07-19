@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { asset } from '../lib/asset'
 import { Inline } from '../lib/inlineMarkdown'
 import { BlockBar } from './BlockBar'
+import { SymbolIcon } from './SymbolIcon'
 import type { FlatItem } from '../App'
 import type { Answer, ExamQuestion } from '../lib/exam'
 import type { LessonImage } from '../types/content'
@@ -58,6 +59,13 @@ export function QuestionView({
           <p className="text-slate-800 leading-relaxed whitespace-pre-line">
             <Inline text={q.prompt} />
           </p>
+
+          {q.symbol && (
+            <div className="mt-3 inline-flex flex-col items-center gap-1 bg-white border border-slate-300 rounded p-3">
+              <SymbolIcon name={q.symbol} />
+              <span className="text-[11px] text-slate-400">Symbool uit de renvooi</span>
+            </div>
+          )}
 
           {q.image && (
             <figure className="mt-3">

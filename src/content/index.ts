@@ -20,7 +20,8 @@ import { bloomExamenA2 } from './bloomexamenA2'
 import { bloomExamenB2 } from './bloomexamenB2'
 import { bloomExamenC2 } from './bloomexamenC2'
 import { bloomExamenD2 } from './bloomexamenD2'
-import { bestekExamTopics } from './bestekTekeningLezen'
+import { bestekExamTopics as bestekTekeningLezenTopics } from './bestekTekeningLezen'
+import { symbolenExamTopics } from './symbolenBouwtekeningen'
 
 export { topicMetas } from './topicMetas'
 export type { TopicMeta } from './topicMetas'
@@ -108,7 +109,15 @@ export const bloomExamTotalCount = Object.values(bloomExamTopics).reduce(
  * examenbestek en de bijbehorende tekeningen. Telt niet mee in de gewone
  * BT1/BT2/BLOOM-examens; wordt uitsluitend gebruikt door de modus "BESTEK".
  */
-export { bestekExamTopics }
+export const bestekExamTopics: Record<string, import('../types/content').Question[]> = [
+  bestekTekeningLezenTopics,
+  symbolenExamTopics,
+].reduce<Record<string, import('../types/content').Question[]>>((acc, rec) => {
+  for (const [code, qs] of Object.entries(rec)) {
+    acc[code] = [...(acc[code] ?? []), ...qs]
+  }
+  return acc
+}, {})
 
 export const bestekExamTotalCount = Object.values(bestekExamTopics).reduce(
   (n, qs) => n + qs.length,

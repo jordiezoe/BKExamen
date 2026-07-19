@@ -40,6 +40,8 @@ interface QuestionBase {
   explanation?: string
   /** Optionele illustratie bij de vraag. */
   image?: LessonImage
+  /** Optioneel zelfgetekend bouwtekening-symbool (zie SymbolIcon), bv. 'deur-enkel'. */
+  symbol?: string
   /** Optionele bestek-/tekening-bijlagen (zoals in het echte examen aangeroepen). */
   attachments?: ExamAttachment[]
   /** Bloom-niveau uit het kwalificatiedossier (K/B/T/A/E/S) — voor het Bloom-examen. */
