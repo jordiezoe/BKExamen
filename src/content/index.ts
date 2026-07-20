@@ -27,6 +27,10 @@ import { bloomExamenD3 } from './bloomexamenD3'
 import { bloomExamenA4 } from './bloomexamenA4'
 import { bloomExamenB4 } from './bloomexamenB4'
 import { bloomExamenC4 } from './bloomexamenC4'
+import { bloomExamenFoutenA } from './bloomexamenFoutenA'
+import { bloomExamenFoutenB } from './bloomexamenFoutenB'
+import { bloomExamenFoutenC } from './bloomexamenFoutenC'
+import { bloomExamenFoutenD } from './bloomexamenFoutenD'
 import { bestekExamTopics as bestekTekeningLezenTopics } from './bestekTekeningLezen'
 import { symbolenExamTopics } from './symbolenBouwtekeningen'
 
@@ -105,6 +109,10 @@ export const bloomExamTopics: Record<string, import('../types/content').Question
   bloomExamenA4,
   bloomExamenB4,
   bloomExamenC4,
+  bloomExamenFoutenA,
+  bloomExamenFoutenB,
+  bloomExamenFoutenC,
+  bloomExamenFoutenD,
 ].reduce<Record<string, import('../types/content').Question[]>>((acc, rec) => {
   for (const [code, qs] of Object.entries(rec)) {
     acc[code] = [...(acc[code] ?? []), ...qs]
