@@ -37,6 +37,10 @@ import { bloomExamenC5 } from './bloomexamenC5'
 import { bloomExamenD5 } from './bloomexamenD5'
 import { bestekExamTopics as bestekTekeningLezenTopics } from './bestekTekeningLezen'
 import { symbolenExamTopics } from './symbolenBouwtekeningen'
+import { zwaarExamenA } from './zwaarExamenA'
+import { zwaarExamenB } from './zwaarExamenB'
+import { zwaarExamenC } from './zwaarExamenC'
+import { zwaarExamenD } from './zwaarExamenD'
 
 export { topicMetas } from './topicMetas'
 export type { TopicMeta } from './topicMetas'
@@ -150,6 +154,30 @@ export const bestekExamTopics: Record<string, import('../types/content').Questio
 }, {})
 
 export const bestekExamTotalCount = Object.values(bestekExamTopics).reduce(
+  (n, qs) => n + qs.length,
+  0,
+)
+
+/**
+ * "Zwaarste examen" — een vast samengesteld, volledig nieuw BT1-2-examen op
+ * NLQF6-niveau: dezelfde blok-/onderwerpverdeling als de echte SVMNIVO-
+ * proeftoets (~55 vragen, verhouding A/B/C/D zoals BLOCK_TARGETS_VOL), maar
+ * met uitsluitend zeer zware, originele vragen. Wordt uitsluitend gebruikt
+ * door de modus "ZWAAR".
+ */
+export const zwaarExamenTopics: Record<string, import('../types/content').Question[]> = [
+  zwaarExamenA,
+  zwaarExamenB,
+  zwaarExamenC,
+  zwaarExamenD,
+].reduce<Record<string, import('../types/content').Question[]>>((acc, rec) => {
+  for (const [code, qs] of Object.entries(rec)) {
+    acc[code] = [...(acc[code] ?? []), ...qs]
+  }
+  return acc
+}, {})
+
+export const zwaarExamenTotalCount = Object.values(zwaarExamenTopics).reduce(
   (n, qs) => n + qs.length,
   0,
 )

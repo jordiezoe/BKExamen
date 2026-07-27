@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import type { Config } from '../App'
 import { SvmLogo } from '../components/SvmLogo'
-import { bloomExamTotalCount, bestekExamTotalCount } from '../content'
+import { bloomExamTotalCount, bestekExamTotalCount, zwaarExamenTotalCount } from '../content'
 import { type ExamLength, type ExamMode } from '../lib/exam'
 
-const MODES: ExamMode[] = ['BT1', 'BT2', 'BT1-2', 'OEFEN', 'BLOOM', 'BESTEK']
+const MODES: ExamMode[] = ['BT1', 'BT2', 'BT1-2', 'OEFEN', 'BLOOM', 'BESTEK', 'ZWAAR']
 
 const NORMAL_LENGTHS: { key: ExamLength; title: string; sub: string }[] = [
   { key: 'vol', title: 'Volledig examen', sub: '± 50 vragen' },
@@ -18,6 +18,7 @@ const MODE_TILE: Record<ExamMode, { title: string; sub: string }> = {
   OEFEN: { title: 'Oefening', sub: 'alleen nieuwe vragen' },
   BLOOM: { title: 'Bloom examen', sub: 'alle onderwerpen, alle vraagvormen' },
   BESTEK: { title: 'Bestek & tekening', sub: 'het echte examenbestek raadplegen' },
+  ZWAAR: { title: 'Zwaarste examen', sub: 'NLQF6 — het moeilijkste dat er is' },
   // HERKANSING is niet los te kiezen op het startscherm; je komt er via de
   // "Herkansing"-knop op de resultaatpagina. Alleen hier voor het Record-type.
   HERKANSING: { title: 'Herkansing', sub: 'oefen je foute vragen opnieuw' },
@@ -118,28 +119,38 @@ export function Home({
                 tekeningen erbij kunt pakken om het antwoord op te zoeken.
               </p>
             )}
+            {mode === 'ZWAAR' && (
+              <p className="mt-3 text-xs text-slate-500">
+                Een volledig nieuw, vast samengesteld examen van <b>{zwaarExamenTotalCount} vragen</b>{' '}
+                — exact opgebouwd als de echte SVMNIVO BT1-2 proeftoets: dezelfde verhouding tussen
+                de vier blokken en dezelfde opbouw volgens de taxonomie van Bloom, maar dan op{' '}
+                <b>NLQF6-niveau</b>. Dit is het moeilijkste examen dat deze app te bieden heeft.
+              </p>
+            )}
           </section>
 
           {/* Lengte */}
-          <section className="bg-white rounded-lg border border-slate-300 p-5">
-            <h2 className="font-semibold text-slate-800 mb-3">2 · Lengte</h2>
-            <div className={`grid gap-2 ${lengthOptions.length === 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2'}`}>
-              {lengthOptions.map((l) => (
-                <button
-                  key={l.key}
-                  onClick={() => setLength(l.key)}
-                  className={`text-left rounded-md border px-3 py-3 transition ${
-                    length === l.key
-                      ? 'border-svm-500 bg-svm-50 ring-1 ring-svm-400'
-                      : 'border-slate-300 hover:bg-slate-50'
-                  }`}
-                >
-                  <div className="font-semibold text-slate-800">{l.title}</div>
-                  <div className="text-xs text-slate-500 mt-0.5">{l.sub}</div>
-                </button>
-              ))}
-            </div>
-          </section>
+          {mode !== 'ZWAAR' && (
+            <section className="bg-white rounded-lg border border-slate-300 p-5">
+              <h2 className="font-semibold text-slate-800 mb-3">2 · Lengte</h2>
+              <div className={`grid gap-2 ${lengthOptions.length === 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2'}`}>
+                {lengthOptions.map((l) => (
+                  <button
+                    key={l.key}
+                    onClick={() => setLength(l.key)}
+                    className={`text-left rounded-md border px-3 py-3 transition ${
+                      length === l.key
+                        ? 'border-svm-500 bg-svm-50 ring-1 ring-svm-400'
+                        : 'border-slate-300 hover:bg-slate-50'
+                    }`}
+                  >
+                    <div className="font-semibold text-slate-800">{l.title}</div>
+                    <div className="text-xs text-slate-500 mt-0.5">{l.sub}</div>
+                  </button>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* Naam */}
           <section className="bg-white rounded-lg border border-slate-300 p-5">

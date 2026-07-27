@@ -1,4 +1,4 @@
-import { topics, nieuweVraagIds, bloomExamTopics, bestekExamTopics, topicMetas } from '../content'
+import { topics, nieuweVraagIds, bloomExamTopics, bestekExamTopics, zwaarExamenTopics, topicMetas } from '../content'
 import type { ExamSection, Niveau, Question, Section } from '../types/content'
 import { shuffleQuestionOptions } from './shuffleOptions'
 
@@ -14,7 +14,7 @@ import { shuffleQuestionOptions } from './shuffleOptions'
  *  - meerkeuze (mc) én meervoudige keuze (multi, met partiële punten).
  */
 
-export type ExamMode = 'BT1' | 'BT2' | 'BT1-2' | 'OEFEN' | 'BLOOM' | 'HERKANSING' | 'BESTEK'
+export type ExamMode = 'BT1' | 'BT2' | 'BT1-2' | 'OEFEN' | 'BLOOM' | 'HERKANSING' | 'BESTEK' | 'ZWAAR'
 export type ExamLength = 'kort' | 'vol' | '30' | '50'
 
 /** De vijf vraagsoorten die de examen-engine kan afnemen en nakijken. */
@@ -105,6 +105,7 @@ function shuffle<T>(arr: T[]): T[] {
 export function buildExam(mode: ExamMode, length: ExamLength = 'vol'): ExamBlock[] {
   if (mode === 'BLOOM') return buildBloomExam(length)
   if (mode === 'BESTEK') return buildBestekExam(length)
+  if (mode === 'ZWAAR') return buildZwaarExam()
 
   const niveauMap = buildNiveauMap()
   const targets = length === 'kort' ? BLOCK_TARGETS_KORT : BLOCK_TARGETS_VOL
@@ -262,6 +263,38 @@ function buildBestekExam(length: ExamLength): ExamBlock[] {
 }
 
 /**
+ * Bouw het "Zwaarste examen": een vast samengesteld BT1-2-examen (~55
+ * vragen) met dezelfde blok-/onderwerpverdeling als de echte SVMNIVO-
+ * proeftoets, maar met een losstaande, volledig nieuwe vragenbank op
+ * NLQF6-niveau. Geen lengte-keuze: dit is altijd de volledige, vaste set.
+ */
+function buildZwaarExam(): ExamBlock[] {
+  const blocks: ExamBlock[] = []
+  for (const section of SECTION_ORDER) {
+    const items: ExamItem[] = []
+    for (const meta of topicMetas) {
+      if (meta.section !== section) continue
+      const qs = zwaarExamenTopics[meta.code] ?? []
+      for (const q of qs) {
+        items.push({
+          question: shuffleQuestionOptions(q as ExamQuestion) as ExamQuestion,
+          topicCode: meta.code,
+          topicTitle: meta.title,
+          section,
+        })
+      }
+    }
+    blocks.push({
+      section,
+      label: SECTION_LABELS[section],
+      intro: SECTION_INTROS[section],
+      items: shuffle(items),
+    })
+  }
+  return blocks
+}
+
+/**
  * Husselt mc/multi-opties opnieuw met een ECHTE (niet-geseede) willekeur,
  * los van de stabiele per-vraag-shuffle van shuffleQuestionOptions. Gebruikt
  * bij herkansingen, zodat de juiste optie niet steeds op dezelfde plek staat
@@ -384,6 +417,7 @@ export const MODE_LABELS: Record<ExamMode, string> = {
   BLOOM: 'Bloom-examen — alle onderwerpen, alle vraagvormen',
   HERKANSING: 'Herkansing — oefen je foute vragen opnieuw',
   BESTEK: 'Bestek en tekening lezen — het echte examenbestek raadplegen',
+  ZWAAR: 'Zwaarste examen — NLQF6-niveau, exact zoals de echte proeftoets opgebouwd',
 }
 
 export const MODE_TITLES: Record<ExamMode, string> = {
@@ -394,4 +428,5 @@ export const MODE_TITLES: Record<ExamMode, string> = {
   BLOOM: 'Bouwkunde Bloom-examen',
   HERKANSING: 'Bouwkunde Herkansing',
   BESTEK: 'Bouwkunde Bestek en tekening lezen',
+  ZWAAR: 'Bouwkunde Zwaarste Examen',
 }
