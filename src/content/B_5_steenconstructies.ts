@@ -625,7 +625,7 @@ Als makelaar moet je gangbare gebreken bij gemetselde gevels herkennen. De meest
         'Kruisverband (strekkenlagen verspringen ½ steen) is sinds de late middeleeuwen het standaardverband voor steensmuren in Nederland.',
       image: {
         src: `${FIG}/kruisverband.jpg`,
-        caption: 'Kruisverband.',
+        caption: 'Let op de afwisseling van strekkenlagen, elk een halve steen verspringend ten opzichte van de vorige.',
         source: SRC,
         width: 'md',
       },
@@ -656,7 +656,7 @@ Als makelaar moet je gangbare gebreken bij gemetselde gevels herkennen. De meest
         'Bij Vlaams verband wisselen kop en strek elkaar binnen één laag af. Bij staand verband wisselen koppen- en strekkenlagen elkaar af.',
       image: {
         src: `${FIG}/vlaams-verband.jpg`,
-        caption: 'Vlaams verband.',
+        caption: 'Let op de afwisseling van kop en strek binnen elke laag.',
         source: SRC,
         width: 'md',
       },
@@ -1148,6 +1148,85 @@ Als makelaar moet je gangbare gebreken bij gemetselde gevels herkennen. De meest
       correctIndex: 1,
       explanation:
         'Bij prefab betonelementen worden de naden vaak met blijvend elastische kit of foamband afgedicht; visueel een dunne, schone lijn — geen klassieke voeg meer.',
+    },
+
+    // B.5.5 — Metselverbanden: uit welke periode komen ze?
+    {
+      id: 'B.5.q48',
+      toetstermCode: 'B.5.5',
+      type: 'mc',
+      prompt: 'Uit welke periode stamt het Vlaams verband, en waarom werd het destijds veel toegepast op representatieve gevels?',
+      options: [
+        'Vooral de 17e eeuw (Gouden Eeuw) — het decoratieve ruitpatroon paste bij de rijk gedetailleerde grachtenpanden van die tijd, ondanks het extra arbeid kostende gebruik van klezoren in elke laag',
+        'Vooral de 20e eeuw — het werd bedacht als snelle, goedkope oplossing voor naoorlogse wederopbouwwoningen',
+        'Vooral de middeleeuwen (vóór 1300) — het oudste bekende verband in Nederland',
+        'Vlaams verband heeft geen enkele relatie met een bouwperiode',
+      ],
+      correctIndex: 0,
+      explanation: 'Vlaams verband is arbeidsintensief (elke laag heeft klezoren nodig) maar geeft een rijk, ruitvormig patroon — daarom vooral toegepast op representatieve 17e-eeuwse gevels, terwijl eenvoudiger verbanden voor minder zichtbare muren werden gebruikt.',
+    },
+    {
+      id: 'B.5.q49',
+      toetstermCode: 'B.5.5',
+      type: 'mc',
+      prompt: 'Halfsteensverband is tegenwoordig het meest gebruikte verband voor het buitenblad van een spouwmuur. Sinds welke periode is dit gangbaar, en waarom juist dan?',
+      options: [
+        'Sinds ongeveer de jaren 1920, toen de spouwmuur (met een dun, zelfstandig buitenblad) de gangbare gevelopbouw werd',
+        'Sinds de 16e eeuw, samen met de opkomst van de eerste bakstenen grachtenpanden',
+        'Sinds de middeleeuwen, als het allereerste metselverband dat werd toegepast',
+        'Halfsteensverband wordt pas sinds deze eeuw voor het eerst toegepast',
+      ],
+      correctIndex: 0,
+      explanation: 'Vóór de spouwmuur gangbaar werd, metselde men overwegend massieve (steens of dikkere) muren, vaak in kruisverband. Toen de spouwmuur vanaf circa 1920 de standaard werd, kreeg het dunne buitenblad — dat maar één steen dik is — vrijwel automatisch halfsteensverband, het enige verband dat bij die dikte mogelijk is.',
+    },
+    {
+      id: 'B.5.q50',
+      toetstermCode: 'B.5.5',
+      type: 'multi',
+      prompt: 'Welke uitspraken over de historische toepassing van metselverbanden zijn juist?',
+      options: [
+        'Kruisverband is sinds de late middeleeuwen (circa 15e eeuw) de Nederlandse standaard voor steensmuren',
+        'Vlaams verband werd vooral toegepast op representatieve gevels vanwege het decoratieve patroon, ten koste van meer arbeid',
+        'Halfsteensverband is van oorsprong het oudste verband en werd al in de middeleeuwen toegepast op steensmuren',
+        'Koppenverband wordt toegepast waar de vorm van de muur (zoals een boog of ronde muur) daarom vraagt, ongeacht een specifieke bouwperiode',
+      ],
+      correctIndices: [0, 1, 3],
+      explanation: 'Halfsteensverband is juist relatief jong (dun buitenblad, pas gangbaar sinds de spouwmuur rond 1920) en niet het oudste verband — steensmuren in de middeleeuwen werden dikker en overwegend in kruisverband gemetseld.',
+    },
+    {
+      id: 'B.5.q51',
+      toetstermCode: 'B.5.5',
+      type: 'match',
+      prompt: 'Koppel elk metselverband aan de periode of context waarin het van oorsprong vooral werd toegepast.',
+      pairs: [
+        { left: 'Kruisverband', right: 'Nederlandse standaard voor steensmuren sinds de late middeleeuwen (circa 15e eeuw)' },
+        { left: 'Vlaams verband', right: 'Representatieve gevels in de 17e eeuw (Gouden Eeuw), vanwege het rijke ruitpatroon' },
+        { left: 'Halfsteensverband', right: 'Buitenblad van de spouwmuur, gangbaar sinds circa 1920' },
+        { left: 'Koppenverband', right: 'Gebogen muurwerk (bogen, ronde muren), door de eeuwen heen toegepast waar de vorm dit vraagt' },
+      ],
+      explanation: 'Elk verband heeft een eigen ontstaansgeschiedenis: kruisverband en Vlaams verband zijn beide "oude" verbanden voor massieve steensmuren, maar met een verschillend doel (respectievelijk doelmatig en decoratief); halfsteensverband hoort bij de latere spouwmuur; koppenverband is vormgebonden in plaats van periodegebonden.',
+    },
+    {
+      id: 'B.5.q52',
+      toetstermCode: 'B.5.5',
+      type: 'mc',
+      prompt: 'Een makelaar bezichtigt een 17e-eeuws grachtenpand met een rijk, ruitvormig gevelpatroon en een naoorlogse jaren-50-woning met een sober, verspringend gevelpatroon zonder koppen. Welke conclusie over de toegepaste verbanden is het meest waarschijnlijk?',
+      options: [
+        'Het grachtenpand is vermoedelijk in Vlaams verband gemetseld, de jaren-50-woning in halfsteensverband',
+        'Beide woningen zijn gegarandeerd in exact hetzelfde verband gemetseld',
+        'Het grachtenpand is vermoedelijk in halfsteensverband gemetseld, de jaren-50-woning in Vlaams verband',
+        'De gevelperiode zegt nooit iets over het toegepaste metselverband',
+      ],
+      correctIndex: 0,
+      explanation: 'Het ruitpatroon (afwisselend kop en strek per laag) is kenmerkend voor Vlaams verband, typisch bij representatieve 17e-eeuwse gevels; het sobere, enkel-strek-patroon zonder koppen hoort bij halfsteensverband, gangbaar bij de spouwmuur van naoorlogse woningen.',
+    },
+    {
+      id: 'B.5.q53',
+      toetstermCode: 'B.5.5',
+      type: 'invul',
+      prompt: 'Vul aan: het verband dat sinds de late middeleeuwen de Nederlandse standaard is voor massieve steensmuren, en waarbij de strekkenlagen steeds een halve steen verspringen ten opzichte van elkaar, heet het ______verband.',
+      acceptableAnswers: ['kruis', 'kruisverband'],
+      explanation: 'Kruisverband is al sinds circa de 15e eeuw de gangbare, doelmatige standaard voor Nederlandse steensmuren.',
     },
   ],
 
